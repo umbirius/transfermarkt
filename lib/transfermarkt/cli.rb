@@ -9,8 +9,11 @@ class Transfermarkt::CLI
   end 
   
   def list_players_names
-    puts "players"
-    puts "Team"
+    @players = Transfermarkt::Player.player
+    puts "NO. --  Name ----- POS ----- Club --- Age -- NAT ---- MV --- Agent ---"
+    @players.each.with_index(1) do |player, i| 
+      puts "#{i}. #{player.name} - #{player.position} - #{player.club} - #{player.age} - #{player.nationality} - #{player.market_value} - #{player.agents}"
+    end 
   end
   
   def menu 
@@ -19,12 +22,12 @@ class Transfermarkt::CLI
     while input != "exit"
     puts "Enter the number of the player you'd like more info on"    
       input = gets.strip.downcase
-      if input == "1"
-        puts "one"
-      elsif input == "2"
-        puts "two"
+      if input.to_i > 0 
+        @players[input.to_i - 1]
       elsif "list"
         list_players_names
+      else 
+        "Enter list or exit"
       end 
     end 
   end 
