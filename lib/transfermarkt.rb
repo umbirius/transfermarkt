@@ -1,6 +1,2 @@
-require "transfermarkt/version"
-
-module Transfermarkt
-  class Error < StandardError; end
-  # Your code goes here...
-end
+require_relative "./transfermarkt/version"
+require_relative './transfermarkt/cli'

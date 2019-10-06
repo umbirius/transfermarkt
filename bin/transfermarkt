@@ -1,3 +1,6 @@
 #!/usr/bin/env ruby
 
-puts "Hello World" 
+require './lib/transfermarkt'
+
+Transfermarkt::CLI.new.call 
+
