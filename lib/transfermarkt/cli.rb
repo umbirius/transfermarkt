@@ -3,16 +3,33 @@
 class Transfermarkt::CLI 
   
   def call 
-    list_player_info
+    list_players_names
     menu 
+    goodbye
   end 
   
-  def list_player_info 
-    puts "player info"
-    puts "Team: , Goals: , Value: "
+  def list_players_names
+    puts "players"
+    puts "Team"
   end
   
   def menu 
-    puts "Enter the number of the player you'd like more info on"
+
+    input = ''
+    while input != "exit"
+    puts "Enter the number of the player you'd like more info on"    
+      input = gets.strip.downcase
+      if input == "1"
+        puts "one"
+      elsif input == "2"
+        puts "two"
+      elsif "list"
+        list_players_names
+      end 
+    end 
+  end 
+  
+  def goodbye 
+    puts "Until next time" 
   end 
 end 
