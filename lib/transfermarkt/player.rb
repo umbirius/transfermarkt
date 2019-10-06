@@ -10,36 +10,37 @@ class Transfermarkt::Player
   end 
   
   
-  def self.scrape_players  
-    Transfermarkt::PlayerScraper.new("https://www.transfermarkt.us/schnellsuche/ergebnis/schnellsuche?query=#{playername}&x=0&y=0")
+  def self.scrape_results
+    # Transfermarkt::PlayerScraper.new("https://www.transfermarkt.us/schnellsuche/ergebnis/schnellsuche?query=#{playername}&x=0&y=0")
     
     players = []
     managers_staff = []
     teams = []
     
+    players << self.scrape_players 
+    managers_staff << self.scrape_managers_staff 
+    teams << self.scrape_teams
+    
         # go to transfermarkt search results based on input from user 
         # extract search results for players - later staff and teams 
         # instatiate a player/team/manager
-    
-    # player1 = self.new 
-    # player1.name = "stefan grizni"
-    # player1.position = "CB"
-    # player1.club = "Barcelona"
-    # player1.age = "14"
-    # player1.nationality = "Brazil"
-    # player1.market_value = "$12"
-    # player1.agents = "mino raiola"
-    
-    # player2 = self.new 
-    # player2.name = "moris lopez"
-    # player2.position = "CF"
-    # player2.club = "Vasco De Gama"
-    # player2.age = "15"
-    # player2.nationality = "Uruguay"
-    # player2.market_value = "$3.50"
-    # player2.agents = "sergio mendes"
-    
-    [player1, player2]
+
+    players
+    managers_staff
+    teams
+  end
+  
+  def self.scrape_players
+    query_search = "milan"
+    doc = Nokogiri::HTML(open("https://www.transfermarkt.us/schnellsuche/ergebnis/schnellsuche?query=#{query_search}&x=0&y=0"))
+    binding.pry
+    title = doc.search("div.table-header").first.text 
+  end 
+  
+  def self.scrape_managers_staff
+  end
+  
+  def self.scrape_teams
   end
   
 end 
