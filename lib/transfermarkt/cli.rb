@@ -4,12 +4,28 @@ class Transfermarkt::CLI
   
   def call 
     list_players_names
+    list_results
+    select_category_results
     menu 
     goodbye
   end 
   
+  
+  def input
+    puts "please enter name of player, managers/staff, or team"
+    input = gets.strip 
+  end 
+  
+  def list_results 
+  end 
+  
+  def select_category_results
+    puts "please select which results you would like: players, managers/staff, or team"
+    input = gets.strip
+  end 
+  
   def list_players_names
-    @players = Transfermarkt::Player.player
+    @players = Transfermarkt::Player.players
     puts "NO. --  Name ----- POS ----- Club --- Age -- NAT ---- MV --- Agent ---"
     @players.each.with_index(1) do |player, i| 
       puts "#{i}. #{player.name} - #{player.position} - #{player.club} - #{player.age} - #{player.nationality} - #{player.market_value} - #{player.agents}"
@@ -22,8 +38,10 @@ class Transfermarkt::CLI
     while input != "exit"
     puts "Enter the number of the player you'd like more info on"    
       input = gets.strip.downcase
+     
       if input.to_i > 0 
-        @players[input.to_i - 1]
+       the_player =  @players[input.to_i - 1]
+       puts the_player.name
       elsif "list"
         list_players_names
       else 
