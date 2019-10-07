@@ -21,8 +21,8 @@ class Transfermarkt::CLI
   
   
   def make_players
-    url = Transfermarkt::Scraper.set_doc(@query)
-    players_array = Transfermarkt::Scraper.scrape_players(url)
+    Transfermarkt::Scraper.set_doc(@query)
+    players_array = Transfermarkt::Scraper.scrape_players
     Transfermarkt::Player.create_from_collection(players_array)
   end 
   

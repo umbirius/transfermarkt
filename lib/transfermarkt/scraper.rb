@@ -20,10 +20,9 @@ class Transfermarkt::Scraper
 
     
   
-  def self.scrape_players(url)
+  def self.scrape_players
     players = []
-    binding.pry
-    loop do
+    # loop do
       player_array = @doc.css("div.box").first #first box with player results
       player_array.css("table.items tbody tr.odd").each_with_index do |player, i| #add the evens or find a way to add both
       
@@ -37,15 +36,14 @@ class Transfermarkt::Scraper
             :agents => player.css("td.rechts a").text
           }
       @new_url = self.next_url
-      binding.pry
-        if new_url
-          @doc = Nokogiri::HTML(open(@new_url))
-        else 
-          break
-        end 
+        # if @new_url
+        #   @doc = Nokogiri::HTML(open(@new_url))
+        # else 
+        #   break
+        # end 
       end 
       players
-    end 
+    # end 
   end 
   
   def self.scrape_managers_staff
