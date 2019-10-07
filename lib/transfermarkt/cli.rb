@@ -28,7 +28,7 @@ class Transfermarkt::CLI
     @players = Transfermarkt::Player.players
     puts "NO. --  Name ----- POS ----- Club --- Age -- NAT ---- MV --- Agent ---"
     @players.each.with_index(1) do |player, i| 
-      puts "#{i}. #{player.name} - #{player.position} - #{player.club} - #{player.age} - #{player.nationality} - #{player.market_value} - #{player.agents}"
+      puts "#{i}. #{player.values[0]} - #{player.values[1]} - #{player.values[2]} - #{player.values[3]} - #{player.values[4]} - #{player.values[5]} - #{player.values[6]}"
     end 
   end
   
