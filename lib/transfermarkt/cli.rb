@@ -19,8 +19,10 @@ class Transfermarkt::CLI
     @query = gets.strip 
   end 
   
+  
   def make_players
-    players_array = Transfermarkt::Scraper.scrape_players(@query)
+    url = Transfermarkt::Scraper.set_doc(@query)
+    players_array = Transfermarkt::Scraper.scrape_players(url)
     Transfermarkt::Player.create_from_collection(players_array)
   end 
   
