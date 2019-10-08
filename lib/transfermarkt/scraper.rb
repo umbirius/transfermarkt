@@ -19,7 +19,12 @@ class Transfermarkt::Scraper
       end 
   end 
   
-
+  def self.scrape_next_page 
+    @url = self.next_url
+    @doc = Nokogiri::HTML(open(@url))
+    self.scrape_players
+    binding.pry
+  end 
     
   
   def self.scrape_players
@@ -39,7 +44,7 @@ class Transfermarkt::Scraper
             :agents => player.css("td.rechts a").text
           }
           
-      @new_url = self.next_url
+      # @new_url = self.next_url
       
         # if @new_url
         #   @doc = Nokogiri::HTML(open(@new_url))

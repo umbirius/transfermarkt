@@ -6,11 +6,8 @@ class Transfermarkt::CLI
     input
     make_players
     display_players
-    # list_players_names
-    # list_results
-    # select_category_results
-    # menu 
-    # goodbye
+    menu 
+    goodbye
   end 
   
   
@@ -25,6 +22,18 @@ class Transfermarkt::CLI
     players_array = Transfermarkt::Scraper.scrape_players
     Transfermarkt::Player.create_from_collection(players_array)
   end 
+  
+  def make_additional_players
+    next_page_player_array = Transfermarkt::Scraper.scrape_next_page
+    Transfermarkt::Player.create_from_collection(next_page_player_array)
+  end 
+  
+  def display_next_page 
+    Transfermarkt::Player.all.each.with_index(11) do |player, i|
+      puts "#{i}. #{player.name} - #{player.position} - #{player.club} - #{player.age} - #{player.nationality} - #{player.market_value} - #{player.agents}"
+    end 
+    end 
+    
   
   def display_players 
     Transfermarkt::Player.all.each.with_index(1) do |player, i|
@@ -45,25 +54,25 @@ class Transfermarkt::CLI
   #   end 
   # end
   
-  # def menu 
+  def menu 
 
-  #   input = ''
-  #   while input != "exit"
-  #   puts "Enter the number of the player you'd like more info on"    
-  #     input = gets.strip.downcase
+    input = ''
+    while input != "exit"
+      puts "Enter the number of the player you'd like more info on"    
+      input = gets.strip.downcase
      
-  #     if input.to_i > 0 
-  #     the_player =  @players[input.to_i - 1]
-  #     puts the_player.name
-  #     elsif "list"
-  #       list_players_names
-  #     else 
-  #       "Enter list or exit"
-  #     end 
-  #   end 
-  # end 
+      if input.to_i > 0 
+        the_player =  Transfermarkt::Player.all[input.to_i - 1]
+        puts the_player.name
+      elsif input == "next"
+        make_additional_players
+        display_next_page
+      end 
+    end 
+  end 
   
-  # def goodbye 
-  #   puts "Until next time" 
-  # end 
+  def goodbye 
+    puts "May your favorite soccer player's stock continue to rise!, until next time!" 
+  end 
+  
 end 
