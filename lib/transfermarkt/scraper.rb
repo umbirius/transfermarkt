@@ -22,8 +22,7 @@ class Transfermarkt::Scraper
   def self.player_profile_url(player)
     player_url = player.url
     player_doc = Nokogiri::HTML(open(player_url))
-    header = player_doc.css("div.row div.dataMain div.dataName").text #could split into [num, first, last] check this
-  
+    header = player_doc.css("div.row div.dataMain div.dataName").text.gsub(/\n/,"").strip
     #player data
     date_of_birth = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td a").first.text
     place_of_birth_city = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td span").text.strip
@@ -36,13 +35,32 @@ class Transfermarkt::Scraper
     date_joined = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[10].text.strip
     contract_exp = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[11].text.strip
     last_contract_ext = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[12].text.strip
-    sponsor = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[13].text.strip
+    if player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[13]
+      sponsor = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[13].text.strip
+    else
+      sponsor = "none"
+    end 
     current_market_value = player_doc.css("div.large-8 div.box div.row div.large-6 div.marktwertentwicklung  div > div.zeile-oben > div.right-td").text.strip
     date_current_market_value = player_doc.css("div.large-8 div.box div.row div.large-6 div.marktwertentwicklung  div > div.zeile-mitte > div.right-td").text.strip
     highest_market_value = player_doc.css("div.large-8 div.box div.row div.large-6 div.marktwertentwicklung  div > div.zeile-unten > div.right-td").text.strip.squeeze("  ").split(" \n ")[0]
     date_highest_market_value = player_doc.css("div.large-8 div.box div.row div.large-6 div.marktwertentwicklung  div > div.zeile-unten > div.right-td").text.strip.squeeze("  ").split(" \n ")[1]
-    
+    binding.pry
+    puts "#{header}"
     puts "DOB: #{date_of_birth}"
+    puts "Birth Place: #{place_of_birth_city}, #{place_of_birth_country}"
+    puts "Age: #{player.age}"
+    puts "Height: #{height}"
+    puts "Position: #{position}"
+    puts "Preffered Foot: #{foot}"
+    puts "Club: #{player.club}"
+    puts "Date Joined: #{date_joined}"
+    puts "Contract Until: #{contract_exp}"
+    puts "Last Contract Extention: #{last_contract_ext}"
+    puts "Athletic Sponsor: #{sponsor}"
+    puts current_market_value
+    puts date_current_market_value
+    puts highest_market_value
+    puts date_highest_market_value
   end 
   
   
@@ -55,12 +73,10 @@ class Transfermarkt::Scraper
     
   
   def self.scrape_players
-    binding.pry
     players = []
-    # loop do
+    
       player_array = @doc.css("div.box").first #first box with player results
       player_array.css("table.items > tbody > tr").each do |player| #add the evens or find a way to add both
-      
       
           players << {
             :name => player.css("td.hauptlink a").text, 
@@ -73,17 +89,8 @@ class Transfermarkt::Scraper
             :url => "https://www.transfermarkt.com" + player.css("td.hauptlink a").attribute("href").value
           }
           
-      # @new_url = self.next_url
-      
-        # if @new_url
-        #   @doc = Nokogiri::HTML(open(@new_url))
-        # else 
-        #   break
-        # end 
       end 
       
-    # end 
-    binding.pry
     players
   end 
   
