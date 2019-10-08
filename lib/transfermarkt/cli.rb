@@ -77,7 +77,7 @@ class Transfermarkt::CLI
      
       if input.to_i > 0 
         the_player =  Transfermarkt::Player.all[input.to_i - 1]
-        puts the_player.name
+        puts Transfermarkt::Scraper.player_profile_url(the_player)
       elsif input == "next" 
         if Transfermarkt::Player.all.length == (@id + 10)
           make_additional_players
