@@ -80,10 +80,19 @@ class Transfermarkt::CLI
         the_player =  Transfermarkt::Player.all[input.to_i - 1]
         puts the_player.name
       elsif input == "next" 
-        make_additional_players
-        display_next_page
+        if Transfermarkt::Player.all.length == (@id + 10)
+          make_additional_players
+          display_next_page
+        else 
+          display_next_page
+        end 
       elsif input == "back"
-        display_previous_page
+        if @id > 9
+          display_previous_page
+        else 
+          puts "select a valid option"
+          #display_current_page
+        end 
       end 
     end 
   end 
