@@ -25,14 +25,18 @@ class Transfermarkt::CLI
   
   def make_additional_players
     next_page_player_array = Transfermarkt::Scraper.scrape_next_page
+    binding.pry
     Transfermarkt::Player.create_from_collection(next_page_player_array)
   end 
   
   def display_next_page 
-    Transfermarkt::Player.all.each.with_index(11) do |player, i|
+    Transfermarkt::Player.all.drop(10).each.with_index(11) do |player, i|
       puts "#{i}. #{player.name} - #{player.position} - #{player.club} - #{player.age} - #{player.nationality} - #{player.market_value} - #{player.agents}"
     end 
-    end 
+  end 
+  
+  def display_previous_page
+  end 
     
   
   def display_players 

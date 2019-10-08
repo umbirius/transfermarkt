@@ -22,8 +22,8 @@ class Transfermarkt::Scraper
   def self.scrape_next_page 
     @url = self.next_url
     @doc = Nokogiri::HTML(open(@url))
-    self.scrape_players
-    binding.pry
+    next_page_players = self.scrape_players
+    next_page_players
   end 
     
   
