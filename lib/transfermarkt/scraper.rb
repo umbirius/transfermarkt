@@ -24,6 +24,17 @@ class Transfermarkt::Scraper
     player_doc = Nokogiri::HTML(open(player_url))
     header = doc.css("div.row div.dataMain div.dataName").text #could split into [num, first, last]
     date_of_birth = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td a").first.text
+    place_of_birth_city = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td span").text.strip
+    place_of_birth_country = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td span img").attribute("title").value
+    #age
+    height = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[4].text.strip
+    position = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[6].text.strip
+    foot = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[7].text.strip
+    #club
+    date_joined = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[10].text.strip
+    contract_exp = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[11].text.strip
+    last_contract_ext = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[12].text.strip
+    sponsor = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[13].text.strip
     
   end 
   
