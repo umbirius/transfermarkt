@@ -22,20 +22,27 @@ class Transfermarkt::Scraper
   def self.player_profile_url(player)
     player_url = player.url
     player_doc = Nokogiri::HTML(open(player_url))
-    header = doc.css("div.row div.dataMain div.dataName").text #could split into [num, first, last]
-    date_of_birth = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td a").first.text
-    place_of_birth_city = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td span").text.strip
-    place_of_birth_country = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td span img").attribute("title").value
+    header = player_doc.css("div.row div.dataMain div.dataName").text #could split into [num, first, last] check this
+  
+    #player data
+    date_of_birth = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td a").first.text
+    place_of_birth_city = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td span").text.strip
+    place_of_birth_country = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td span img").attribute("title").value
     #age
-    height = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[4].text.strip
-    position = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[6].text.strip
-    foot = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[7].text.strip
+    height = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[4].text.strip
+    position = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[6].text.strip
+    foot = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[7].text.strip
     #club
-    date_joined = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[10].text.strip
-    contract_exp = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[11].text.strip
-    last_contract_ext = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[12].text.strip
-    sponsor = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[13].text.strip
+    date_joined = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[10].text.strip
+    contract_exp = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[11].text.strip
+    last_contract_ext = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[12].text.strip
+    sponsor = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[13].text.strip
+    current_market_value = player_doc.css("div.large-8 div.box div.row div.large-6 div.marktwertentwicklung  div > div.zeile-oben > div.right-td").text.strip
+    date_current_market_value = player_doc.css("div.large-8 div.box div.row div.large-6 div.marktwertentwicklung  div > div.zeile-mitte > div.right-td").text.strip
+    highest_market_value = player_doc.css("div.large-8 div.box div.row div.large-6 div.marktwertentwicklung  div > div.zeile-unten > div.right-td").text.strip.squeeze("  ").split(" \n ")[0]
+    date_highest_market_value = player_doc.css("div.large-8 div.box div.row div.large-6 div.marktwertentwicklung  div > div.zeile-unten > div.right-td").text.strip.squeeze("  ").split(" \n ")[1]
     
+    puts "DOB: #{date_of_birth}"
   end 
   
   
