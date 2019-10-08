@@ -12,7 +12,7 @@ class Transfermarkt::CLI
   
   
   def input
-    puts "please enter name of player, managers/staff, or team"
+    puts "Please enter name of player:"
     @query = gets.strip 
   end 
   
@@ -54,12 +54,14 @@ class Transfermarkt::CLI
   end 
   
   def display_players 
-    rows = []
+    puts "Results:"
+    # rows = []
     Transfermarkt::Player.all.each.with_index(1) do |player, i|
-      rows << ["#{i}. ", player.name, player.position, player.club, player.age, player.nationality, player.market_value, player.agents]
+      # rows << puts ["#{i}. ", player.name, player.position, player.club, player.age, player.nationality, player.market_value, player.agents]
+      puts "#{i}. #{player.name} - #{player.position} - #{player.club} - #{player.age} - #{player.nationality} - #{player.market_value} - #{player.agents}"
     end
-    table = Terminal::Table.new :rows => rows
-    puts table
+    # table = Terminal::Table.new :rows => rows
+    # puts table
   end 
   
   def select_category_results
@@ -72,32 +74,48 @@ class Transfermarkt::CLI
 
     input = ''
     while input != "exit"
-      puts "Enter the number of the player you'd like more info on"    
+      puts "Enter the number of the player you'd like more info on:"    
       input = gets.strip.downcase
      
       if input.to_i > 0 
         the_player =  Transfermarkt::Player.all[input.to_i - 1]
         puts Transfermarkt::Scraper.player_profile_url(the_player)
-      elsif input == "next" 
+      elsif input == ">" 
         if Transfermarkt::Player.all.length == (@id + 10)
           make_additional_players
           display_next_page
         else 
           display_next_page
         end 
-      elsif input == "back"
+      elsif input == "<"
         if @id > 9
           display_previous_page
         else 
           display_current_page
-          puts "select a valid option"
-        end 
+          puts "Please select a valid option."
+          puts "Type '-h' for help" 
+        end
+      elsif input == "list"
+        display_current_page
+      elsif input == "-h"
+        help 
+      elsif input != "exit" 
+        puts "Please select a valid option."
+        puts "Type '-h' for help"
       end 
     end 
   end 
   
   def goodbye 
     puts "May your favorite soccer player's stock continue to rise!, until next time!" 
+  end 
+  
+  def help 
+    puts "Input number to generate more information on a player"
+    puts "exit - to escape"
+    puts " > - shows next page of results"
+    puts " < - shows last page of results"
+    puts "list - shows current search results"
   end 
   
 end 
