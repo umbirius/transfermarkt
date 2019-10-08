@@ -18,6 +18,7 @@ class Transfermarkt::CLI
   
   
   def make_players
+    @id = 0
     Transfermarkt::Scraper.set_doc(@query)
     players_array = Transfermarkt::Scraper.scrape_players
     Transfermarkt::Player.create_from_collection(players_array)
@@ -25,21 +26,25 @@ class Transfermarkt::CLI
   
   def make_additional_players
     next_page_player_array = Transfermarkt::Scraper.scrape_next_page
-    binding.pry
     Transfermarkt::Player.create_from_collection(next_page_player_array)
   end 
   
-  def display_next_page 
-    Transfermarkt::Player.all.drop(10).each.with_index(11) do |player, i|
+  def display_next_page
+    @id += 10
+    Transfermarkt::Player.all.drop(@id).each.with_index(@id + 1) do |player, i|
+      break if i > (@id + 10)
+      puts "#{i}. #{player.name} - #{player.position} - #{player.club} - #{player.age} - #{player.nationality} - #{player.market_value} - #{player.agents}"
+    end 
+    
+  end 
+  
+  def display_previous_page
+    @id -= 10
+    Transfermarkt::Player.all.drop(@id).each.with_index(@id + 1) do |player, i|
+      break if i > (@id + 10)
       puts "#{i}. #{player.name} - #{player.position} - #{player.club} - #{player.age} - #{player.nationality} - #{player.market_value} - #{player.agents}"
     end 
   end 
-  
-  # def display_previous_page
-  #   Transfermarkt::Player.all..each.with_index(11) do |player, i|
-  #     puts "#{i}. #{player.name} - #{player.position} - #{player.club} - #{player.age} - #{player.nationality} - #{player.market_value} - #{player.agents}"
-  #   end 
-  # end 
     
   
   def display_players 
@@ -74,9 +79,11 @@ class Transfermarkt::CLI
       if input.to_i > 0 
         the_player =  Transfermarkt::Player.all[input.to_i - 1]
         puts the_player.name
-      elsif input == "next"
+      elsif input == "next" 
         make_additional_players
         display_next_page
+      elsif input == "back"
+        display_previous_page
       end 
     end 
   end 
