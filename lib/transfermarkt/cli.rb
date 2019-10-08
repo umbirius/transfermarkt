@@ -46,6 +46,12 @@ class Transfermarkt::CLI
     end 
   end 
     
+  def display_current_page
+    Transfermarkt::Player.all.drop(@id).each.with_index(@id + 1) do |player, i|
+      break if i > (@id + 10)
+      puts "#{i}. #{player.name} - #{player.position} - #{player.club} - #{player.age} - #{player.nationality} - #{player.market_value} - #{player.agents}"
+    end 
+  end 
   
   def display_players 
     rows = []
@@ -61,13 +67,6 @@ class Transfermarkt::CLI
     input = gets.strip
   end 
   
-  # def list_players_names
-  #   @players = Transfermarkt::Player.players
-  #   puts "NO. --  Name ----- POS ----- Club --- Age -- NAT ---- MV --- Agent ---"
-  #   @players.each.with_index(1) do |player, i| 
-  #     puts "#{i}. #{player.values[0]} - #{player.values[1]} - #{player.values[2]} - #{player.values[3]} - #{player.values[4]} - #{player.values[5]} - #{player.values[6]}"
-  #   end 
-  # end
   
   def menu 
 
@@ -90,8 +89,8 @@ class Transfermarkt::CLI
         if @id > 9
           display_previous_page
         else 
+          display_current_page
           puts "select a valid option"
-          #display_current_page
         end 
       end 
     end 
