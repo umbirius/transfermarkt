@@ -19,6 +19,15 @@ class Transfermarkt::Scraper
       end 
   end 
   
+  def self.player_profile_url(player)
+    player_url = player.url
+    doc = Nokogiri::HTML(open(player_url))
+    header = doc.css("div.row div.dataMain div.dataName").text #could split into [num, first, last]
+    date_of_birth
+    
+  end 
+  
+  
   def self.scrape_next_page 
     @url = self.next_url
     @doc = Nokogiri::HTML(open(@url))
@@ -28,6 +37,7 @@ class Transfermarkt::Scraper
     
   
   def self.scrape_players
+    binding.pry
     players = []
     # loop do
       player_array = @doc.css("div.box").first #first box with player results
@@ -41,7 +51,8 @@ class Transfermarkt::Scraper
             :age => player.css("td.zentriert")[2].text,
             :nationality => player.css("td.zentriert img")[1].attribute("title").value,
             :market_value => player.css("td.rechts").first.text,
-            :agents => player.css("td.rechts a").text
+            :agents => player.css("td.rechts a").text,
+            :url => "https://www.transfermarkt.com" + player.css("td.hauptlink a").attribute("href").value
           }
           
       # @new_url = self.next_url
@@ -54,6 +65,7 @@ class Transfermarkt::Scraper
       end 
       
     # end 
+    binding.pry
     players
   end 
   

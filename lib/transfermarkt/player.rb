@@ -2,7 +2,7 @@ require 'pry'
 
 class Transfermarkt::Player 
   
-  attr_accessor :name, :position, :club, :age, :nationality, :market_value, :agents 
+  attr_accessor :name, :position, :club, :age, :nationality, :market_value, :agents, :url 
 
   @@all = []
   
