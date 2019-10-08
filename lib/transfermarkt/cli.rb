@@ -43,9 +43,12 @@ class Transfermarkt::CLI
     
   
   def display_players 
+    rows = []
     Transfermarkt::Player.all.each.with_index(1) do |player, i|
-      puts "#{i}. #{player.name} - #{player.position} - #{player.club} - #{player.age} - #{player.nationality} - #{player.market_value} - #{player.agents}"
-    end 
+      rows << ["#{i}. ", player.name, player.position, player.club, player.age, player.nationality, player.market_value, player.agents]
+    end
+    table = Terminal::Table.new :rows => rows
+    puts table
   end 
   
   def select_category_results
