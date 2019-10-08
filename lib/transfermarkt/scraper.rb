@@ -21,9 +21,9 @@ class Transfermarkt::Scraper
   
   def self.player_profile_url(player)
     player_url = player.url
-    doc = Nokogiri::HTML(open(player_url))
+    player_doc = Nokogiri::HTML(open(player_url))
     header = doc.css("div.row div.dataMain div.dataName").text #could split into [num, first, last]
-    date_of_birth
+    date_of_birth = doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td a").first.text
     
   end 
   
