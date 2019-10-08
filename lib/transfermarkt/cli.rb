@@ -80,14 +80,14 @@ class Transfermarkt::CLI
       if input.to_i > 0 
         the_player =  Transfermarkt::Player.all[input.to_i - 1]
         puts Transfermarkt::Scraper.player_profile_url(the_player)
-      elsif input == ">" 
+      elsif input == "next" 
         if Transfermarkt::Player.all.length == (@id + 10)
           make_additional_players
           display_next_page
         else 
           display_next_page
         end 
-      elsif input == "<"
+      elsif input == "back"
         if @id > 9
           display_previous_page
         else 
@@ -113,8 +113,8 @@ class Transfermarkt::CLI
   def help 
     puts "Input number to generate more information on a player"
     puts "exit - to escape"
-    puts " > - shows next page of results"
-    puts " < - shows last page of results"
+    puts "next - shows next page of results"
+    puts "back - shows last page of results"
     puts "list - shows current search results"
   end 
   
