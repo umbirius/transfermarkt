@@ -1,5 +1,6 @@
 require 'open-uri'
 require 'nokogiri'
+require 'terminal-table'
 
 require_relative "./transfermarkt/version"
 require_relative "./transfermarkt/player"
