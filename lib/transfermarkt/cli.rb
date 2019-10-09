@@ -13,6 +13,12 @@ class Transfermarkt::CLI
   end 
   
   def welcome
+    pastel = Pastel.new
+    font = TTY::Font.new(:doom)
+    puts font.write("Welcome to the Transfermarket!")
+    binding.pry
+    puts pastel.red('Unicorns!')
+
     puts "Welcome to the Transfermarket!"
     puts "How much is your favorite player worth?"
     puts "Type next to continue"
