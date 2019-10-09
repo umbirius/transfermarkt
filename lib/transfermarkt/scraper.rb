@@ -27,7 +27,6 @@ class Transfermarkt::Scraper
     date_of_birth = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td a").first.text
     place_of_birth_city = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td span").text.strip.gsub(/[^a-zA-Z]/,"")
     place_of_birth_country = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td span img").attribute("title").value
-    binding.pry
     #age
     height = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[4].text.strip
     position = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[6].text.strip

@@ -3,6 +3,8 @@
 class Transfermarkt::CLI 
   
   def call 
+    welcome
+    choose
     input
     make_players
     display_players
@@ -10,9 +12,33 @@ class Transfermarkt::CLI
     goodbye
   end 
   
+  def welcome
+    puts "Welcome to the Transfermarket!"
+    puts "How much is your favorite player worth?"
+    puts "Type next to continue"
+    input = ''
+    while input != "next"
+      input = gets.strip.downcase
+    end 
+    
+  end 
+  
+  def choose 
+    puts "Select one of the following options:"
+    puts "1: List of most expensive players"
+    puts "2: Search player by name"
+    @option = gets.strip.to_i
+    if @option == 1
+      puts "most expensive player list"
+    elsif @option == 2
+      puts "search"
+    else 
+      puts "please select from the list"
+    end 
+  end 
   
   def input
-    puts "Please enter name of player:"
+    puts "Please enter a player:"
     @query = gets.strip 
   end 
   
