@@ -2,7 +2,7 @@ require 'pry'
 
 class Transfermarkt::Player 
   
-  attr_accessor :name, :position, :club, :age, :nationality, :market_value, :agents, :url, :header, :date_of_birth, :place_of_birth_city, :place_of_birth_country, :height, :position, :foot, :date_joined, :contract_exp, :last_contract_ext, :current_market_value, :date_current_market_value, :highest_market_value, :date_highest_market_value
+  attr_accessor :name, :position, :club, :age, :nationality, :market_value, :agents, :url, :header, :date_of_birth, :place_of_birth_city, :place_of_birth_country, :height, :position, :foot, :date_joined, :contract_exp, :last_contract_ext, :current_market_value, :date_current_market_value, :highest_market_value, :date_highest_market_value, :sponsor
   
 
   @@all = []

@@ -133,19 +133,18 @@ class Transfermarkt::CLI
     add_attr_hash = Transfermarkt::Scraper.player_profile(@player)
     @player.add_attributes(add_attr_hash)
     @player
-    binding.pry
   end 
     
   def display_player_info
     puts "#{@player.header}"
     puts "DOB: #{@player.date_of_birth}"
     puts "Birth Place: #{@player.place_of_birth_city}, #{@player.place_of_birth_country}"
-    puts "Age: #{@player.player.age}"
+    puts "Age: #{@player.age}"
     puts "Height: #{@player.height}"
     puts "Position: #{@player.position}"
     puts "Preffered Foot: #{@player.foot}"
-    puts "Agent: #@player.{player.agents}"
-    puts "Club: #{@player.player.club}"
+    puts "Agent: #{@player.agents}"
+    puts "Club: #{@player.club}"
     puts "Date Joined: #{@player.date_joined}"
     puts "Contract Until: #{@player.contract_exp}"
     puts "Last Contract Extention: #{@player.last_contract_ext}"
@@ -154,7 +153,6 @@ class Transfermarkt::CLI
     puts "Last Updated: #{@player.date_current_market_value}"
     puts "Hightest Market Value: #{@player.highest_market_value}"
     puts "Date: #{@player.date_highest_market_value}"
-    
   end 
   
   def make_additional_players
@@ -207,9 +205,12 @@ class Transfermarkt::CLI
 
     input = ''
     while input != "exit"
-      puts "Enter the number of the player you'd like more info on:"    
-      input = gets.strip.downcase
-     
+      if input == ''
+        puts "Enter the number of the player you'd like more info on:"    
+        input = gets.strip.downcase
+      end 
+        puts "Would you like to search for another player?"
+      
       if input.to_i > 0 
         @player =  Transfermarkt::Player.all[input.to_i - 1]
         add_player_bio
@@ -235,7 +236,7 @@ class Transfermarkt::CLI
         help 
       elsif input != "exit" 
         puts "Please select a valid option."
-        puts "Type '-h' for help"
+        puts "Type 'h' for help"
       end 
     end 
   end 

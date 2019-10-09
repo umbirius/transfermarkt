@@ -40,7 +40,7 @@ class Transfermarkt::Scraper
       :date_highest_market_value => player_doc.css("div.large-8 div.box div.row div.large-6 div.marktwertentwicklung  div > div.zeile-unten > div.right-td").text.strip.squeeze("  ").split(" \n ")[1]
     }
   
-    if player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[13]
+    if player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th").text.include?("Outfitter:")
       hash[:sponsor] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[13].text.strip
     else
       hash[:sponsor] = "none"
