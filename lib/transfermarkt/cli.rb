@@ -129,10 +129,40 @@ class Transfermarkt::CLI
     Transfermarkt::Player.create_from_collection(players_array)
   end 
   
+  def add_player_bio 
+    add_attr_hash = Transfermarkt::Scraper.player_profile(@player)
+    Transfermarkt::Player.add_attributes(add_attr_hash)
+    @player
+    binding.pry
+  end 
+    
+  def display_player_info
+    puts "#{@player.header}"
+    puts "DOB: #{@player.date_of_birth}"
+    puts "Birth Place: #{@player.place_of_birth_city}, #{@player.place_of_birth_country}"
+    puts "Age: #{@player.player.age}"
+    puts "Height: #{@player.height}"
+    puts "Position: #{@player.position}"
+    puts "Preffered Foot: #{@player.foot}"
+    puts "Agent: #@player.{player.agents}"
+    puts "Club: #{@player.player.club}"
+    puts "Date Joined: #{@player.date_joined}"
+    puts "Contract Until: #{@player.contract_exp}"
+    puts "Last Contract Extention: #{@player.last_contract_ext}"
+    puts "Athletic Sponsor: #{@player.sponsor}"
+    puts "Current Market Value: #{@player.current_market_value}"
+    puts "Last Updated: #{@player.date_current_market_value}"
+    puts "Hightest Market Value: #{@player.highest_market_value}"
+    puts "Date: #{@player.date_highest_market_value}"
+    
+  end 
+  
   def make_additional_players
     next_page_player_array = Transfermarkt::Scraper.scrape_next_page
     Transfermarkt::Player.create_from_collection(next_page_player_array)
   end 
+  
+  def 
   
   def display_next_page
     @id += 10
@@ -169,10 +199,8 @@ class Transfermarkt::CLI
     # puts table
   end 
   
-  def select_category_results
-    puts "please select which results you would like: players, managers/staff, or team"
-    input = gets.strip
-  end 
+  
+  
   
   
   def menu 
@@ -183,8 +211,9 @@ class Transfermarkt::CLI
       input = gets.strip.downcase
      
       if input.to_i > 0 
-        the_player =  Transfermarkt::Player.all[input.to_i - 1]
-        puts Transfermarkt::Scraper.player_profile_url(the_player)
+        @player =  Transfermarkt::Player.all[input.to_i - 1]
+        add_player_bio
+        display_player_info
       elsif input == "next" 
         if Transfermarkt::Player.all.length == (@id + 10)
           make_additional_players

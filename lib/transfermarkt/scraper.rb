@@ -19,7 +19,7 @@ class Transfermarkt::Scraper
       end 
   end 
   
-  def self.player_profile_url(player)
+  def self.player_profile(player)
     player_url = player.url
     player_doc = Nokogiri::HTML(open(player_url))
     
@@ -45,24 +45,8 @@ class Transfermarkt::Scraper
     else
       hash[:sponsor] = "none"
     end 
+    hash
 
-    # puts "#{header}"
-    # puts "DOB: #{date_of_birth}"
-    # puts "Birth Place: #{place_of_birth_city}, #{place_of_birth_country}"
-    # puts "Age: #{player.age}"
-    # puts "Height: #{height}"
-    # puts "Position: #{position}"
-    # puts "Preffered Foot: #{foot}"
-    # puts "Agent: #{player.agents}"
-    # puts "Club: #{player.club}"
-    # puts "Date Joined: #{date_joined}"
-    # puts "Contract Until: #{contract_exp}"
-    # puts "Last Contract Extention: #{last_contract_ext}"
-    # puts "Athletic Sponsor: #{sponsor}"
-    # puts "Current Market Value: #{current_market_value}"
-    # puts "Last Updated: #{date_current_market_value}"
-    # puts "Hightest Market Value: #{highest_market_value}"
-    # puts "Date: #{date_highest_market_value}"
   end 
   
   
