@@ -8,6 +8,7 @@ class Transfermarkt::Scraper
   def self.set_doc(query)
     @url = "https://www.transfermarkt.us/schnellsuche/ergebnis/schnellsuche?query=#{query}&x=0&y=0"
     @doc = Nokogiri::HTML(open(@url))
+    binding.pry
   end 
   
   def self.next_url
