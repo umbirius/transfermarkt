@@ -8,8 +8,9 @@ class Transfermarkt::CLIO
     # input
     make_players
     prompt = TTY::Prompt.new
-    choices  = (Transfermarkt::Player.all.map {|player| player.name})
-    player = prompt.enum_select("Choose your player?", choices, per_page: 7)
+    choices  = (Transfermarkt::Player.all.map.with_index {|player, i| "#{i}. #{player.name}"})
+    choices += ["next pg","previous pg"]
+    player = prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
     
       
     player_i = player.delete('^0-9').to_i
