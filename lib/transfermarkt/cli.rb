@@ -10,9 +10,11 @@ class Transfermarkt::CLIO
     choices += ["next","back"]
     selection = prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
     
+    
     if selection == "next" 
       if Transfermarkt::Player.all.length == (@id + 10)
         make_additional_players
+        binding.pry
         display_next_page
       else
         display_next_page
@@ -53,11 +55,16 @@ class Transfermarkt::CLIO
   end 
   
   def display_next_page
+    prompt = TTY::Prompt.new
     @id += 10
-    Transfermarkt::Player.all.drop(@id).each.with_index(@id + 1) do |player, i|
-      break if i > (@id + 10)
-      puts "#{i}. #{player.name} - #{player.position} - #{player.club} - #{player.age} - #{player.nationality} - #{player.market_value} - #{player.agents}"
+    
+    choices = Transfermarkt::Player.all.drop(@id).map.with_index(@id + 1) do |player, i|
+      "#{i}. #{player.name}"
+    break if i > (@id + 10)
     end 
+    binding.pry
+    choices += ["next","back"] 
+    selection = prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
     
   end 
   
