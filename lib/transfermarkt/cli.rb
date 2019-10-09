@@ -14,9 +14,15 @@ class Transfermarkt::CLI
   
   def welcome
     pastel = Pastel.new
-    font = TTY::Font.new(:doom)
-    puts font.write("Welcome to the Transfermarket!")
-    binding.pry
+    input
+    
+    make_players
+    prompt = TTY::Prompt.new
+    choices  = (Transfermarkt::Player.all.map.with_index(1) {|player, i| "#{i}.  #{player.name}"})
+    player = prompt.select(pastel.blue("  Choose your Player"), choices, help: "(Bash keyboard)", symbols: {marker: '>'})
+    player_i = player.delete('^0-9').to_i
+    
+  
     puts pastel.red('Unicorns!')
 
     puts "Welcome to the Transfermarket!"

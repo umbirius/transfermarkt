@@ -1,8 +1,7 @@
 require 'open-uri'
 require 'nokogiri'
 require 'terminal-table'
-require 'tty'
-require 'tty-font'
+require 'tty-prompt'
 require "colorize"
 
 require_relative "./transfermarkt/version"
