@@ -131,7 +131,7 @@ class Transfermarkt::CLI
   
   def add_player_bio 
     add_attr_hash = Transfermarkt::Scraper.player_profile(@player)
-    Transfermarkt::Player.add_attributes(add_attr_hash)
+    @player.add_attributes(add_attr_hash)
     @player
     binding.pry
   end 
