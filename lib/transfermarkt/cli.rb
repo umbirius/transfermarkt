@@ -82,8 +82,8 @@ end
 class Transfermarkt::CLI 
   
   def call 
-    welcome
-    choose
+    # welcome
+    # choose
     input
     make_players
     display_players
