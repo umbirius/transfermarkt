@@ -1,5 +1,84 @@
 #CLI controller 
 
+class Transfermarkt::CLIO
+
+  def call
+    prompt1 = TTY::Prompt.new
+    @query = prompt1.ask("Select a player?")
+    # input
+    make_players
+    prompt = TTY::Prompt.new
+    choices  = (Transfermarkt::Player.all.map {|player| player.name})
+    player = prompt.enum_select("Choose your player?", choices, per_page: 7)
+    
+      
+    player_i = player.delete('^0-9').to_i
+    binding.pry
+  end 
+
+  def input
+    puts "Please enter a player:"
+    @query = gets.strip 
+  end 
+  
+  
+  def make_players
+    @id = 0
+    Transfermarkt::Scraper.set_doc(@query)
+    players_array = Transfermarkt::Scraper.scrape_players
+    Transfermarkt::Player.create_from_collection(players_array)
+  end 
+  
+  def make_additional_players
+    next_page_player_array = Transfermarkt::Scraper.scrape_next_page
+    Transfermarkt::Player.create_from_collection(next_page_player_array)
+  end 
+  
+  def display_next_page
+    @id += 10
+    Transfermarkt::Player.all.drop(@id).each.with_index(@id + 1) do |player, i|
+      break if i > (@id + 10)
+      puts "#{i}. #{player.name} - #{player.position} - #{player.club} - #{player.age} - #{player.nationality} - #{player.market_value} - #{player.agents}"
+    end 
+    
+  end 
+  
+  def display_previous_page
+    @id -= 10
+    Transfermarkt::Player.all.drop(@id).each.with_index(@id + 1) do |player, i|
+      break if i > (@id + 10)
+      puts "#{i}. #{player.name} - #{player.position} - #{player.club} - #{player.age} - #{player.nationality} - #{player.market_value} - #{player.agents}"
+    end 
+  end 
+    
+  def display_current_page
+    Transfermarkt::Player.all.drop(@id).each.with_index(@id + 1) do |player, i|
+      break if i > (@id + 10)
+      puts "#{i}. #{player.name} - #{player.position} - #{player.club} - #{player.age} - #{player.nationality} - #{player.market_value} - #{player.agents}"
+    end 
+  end 
+  
+  def display_players 
+    puts "Results:"
+    # rows = []
+    Transfermarkt::Player.all.each.with_index(1) do |player, i|
+      # rows << puts ["#{i}. ", player.name, player.position, player.club, player.age, player.nationality, player.market_value, player.agents]
+      puts "#{i}. #{player.name} - #{player.position} - #{player.club} - #{player.age} - #{player.nationality} - #{player.market_value} - #{player.agents}"
+    end
+    # table = Terminal::Table.new :rows => rows
+    # puts table
+  end 
+  
+  def select_category_results
+    puts "please select which results you would like: players, managers/staff, or team"
+    input = gets.strip
+  end 
+  
+
+end 
+
+
+
 class Transfermarkt::CLI 
   
   def call 
@@ -13,18 +92,6 @@ class Transfermarkt::CLI
   end 
   
   def welcome
-    pastel = Pastel.new
-    input
-    
-    make_players
-    prompt = TTY::Prompt.new
-    choices  = (Transfermarkt::Player.all.map.with_index(1) {|player, i| "#{i}.  #{player.name}"})
-    player = prompt.select(pastel.blue("  Choose your Player"), choices, help: "(Bash keyboard)", symbols: {marker: '>'})
-    player_i = player.delete('^0-9').to_i
-    
-  
-    puts pastel.red('Unicorns!')
-
     puts "Welcome to the Transfermarket!"
     puts "How much is your favorite player worth?"
     puts "Type next to continue"
