@@ -3,23 +3,40 @@
 class Transfermarkt::CLIO
 
   def call
-    prompt1 = TTY::Prompt.new
-    @query = prompt1.ask("Select a player?")
-    # input
+    input
     make_players
     prompt = TTY::Prompt.new
-    choices  = (Transfermarkt::Player.all.map.with_index {|player, i| "#{i}. #{player.name}"})
-    choices += ["next pg","previous pg"]
-    player = prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
+    choices  = (Transfermarkt::Player.all.map.with_index(1) {|player, i| "#{i}. #{player.name}"})
+    choices += ["next","back"]
+    selection = prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
     
-      
-    player_i = player.delete('^0-9').to_i
-    binding.pry
+    if selection == "next" 
+      if Transfermarkt::Player.all.length == (@id + 10)
+        make_additional_players
+        display_next_page
+      else
+        display_next_page
+      end 
+    elsif input == "back"
+      if @id > 9
+        display_previous_page
+      else 
+        display_current_page
+        puts "Please select a valid option."
+        puts "Type '-h' for help"
+      end 
+    else 
+      selection_i = player.delete('^0-9').to_i
+      @player =  Transfermarkt::Player.all[selection_i - 1]
+      add_player_bio
+      display_player_info
+    end 
   end 
 
   def input
-    puts "Please enter a player:"
-    @query = gets.strip 
+    prompt1 = TTY::Prompt.new
+    puts "Welcome to the Transfer-market!"
+    @query = prompt1.ask("Enter a player:")
   end 
   
   
@@ -59,16 +76,6 @@ class Transfermarkt::CLIO
     end 
   end 
   
-  def display_players 
-    puts "Results:"
-    # rows = []
-    Transfermarkt::Player.all.each.with_index(1) do |player, i|
-      # rows << puts ["#{i}. ", player.name, player.position, player.club, player.age, player.nationality, player.market_value, player.agents]
-      puts "#{i}. #{player.name} - #{player.position} - #{player.club} - #{player.age} - #{player.nationality} - #{player.market_value} - #{player.agents}"
-    end
-    # table = Terminal::Table.new :rows => rows
-    # puts table
-  end 
   
   def select_category_results
     puts "please select which results you would like: players, managers/staff, or team"
