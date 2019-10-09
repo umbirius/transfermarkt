@@ -18,6 +18,12 @@ class Transfermarkt::Player
     end 
   end 
   
+  def self.add_attributes(add_attr_hash)
+    add_attr_hash.each do |key, value| 
+      self.send(("#{key}="), value)
+    end 
+  end 
+  
   def self.all 
     @@all 
   end 
