@@ -43,7 +43,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "nokogiri"
   spec.add_dependency "terminal-table"
   spec.add_dependency "tty"
-  spec.add_dependency "tty-font"
-  spec.add_dependency "colorize"
+  spec.add_dependency "pastel"
   #spec.add_dependency "open-uri"
 end
