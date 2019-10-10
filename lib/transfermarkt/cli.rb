@@ -8,19 +8,19 @@ class Transfermarkt::CLIO
     prompt = TTY::Prompt.new
     choices  = (Transfermarkt::Player.all.map.with_index(1) {|player, i| "#{i}. #{player.name}"})
     choices += ["next","back"]
-    selection = prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
+    @selection = prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
     
     while @selection != ""
       if @selection == "next" 
         if Transfermarkt::Player.all.length == (@id + 10)
           make_additional_players
-          binding.pry
           display_next_page
         else
           display_next_page
         end 
       elsif @selection == "back"
         if @id > 9
+          binding.pry
           display_previous_page
         else 
           display_current_page
@@ -59,24 +59,23 @@ class Transfermarkt::CLIO
     prompt = TTY::Prompt.new
     @id += 10
     
-    choices = Transfermarkt::Player.all.drop(@id).map.with_index(@id + 1) do |player, i|
+    choices = Transfermarkt::Player.all.slice(@id..(@id+9)).map.with_index(@id + 1) do |player, i|
       "#{i}. #{player.name}"
-  
     end 
     choices += ["next","back"] 
-    selection = prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
+    @selection = prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
     
   end 
   
   def display_previous_page
     prompt = TTY::Prompt.new
     @id -= 10
-    
-    choices = Transfermarkt::Player.all.drop(@id).map.with_index(@id + 1) do |player, i|
+    binding.pry
+    choices = Transfermarkt::Player.all.slice(@id..(@id+9)).map.with_index(@id + 1) do |player, i|
       "#{i}. #{player.name}"
     end 
     choices += ["next","back"] 
-    selection = prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
+    @selection = prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
   end 
     
   def display_current_page
