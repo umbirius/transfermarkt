@@ -26,26 +26,40 @@ class Transfermarkt::Scraper
     hash = {
       :header => player_doc.css("div.row div.dataMain div.dataName").text.gsub(/\n/,"").strip,
       :date_of_birth => player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td a").first.text,
-      :place_of_birth_city => player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td span").text.strip.gsub(/[^a-zA-Z]/,""),
-      :place_of_birth_country => player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td span img").attribute("title").value,
-      :height => player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[4].text.strip,
-      :position => player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[6].text.strip,
-      :foot => player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[7].text.strip,
-      :date_joined => player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[10].text.strip,
-      :contract_exp => player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[11].text.strip,
-      :last_contract_ext => player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[12].text.strip,
       :current_market_value => player_doc.css("div.large-8 div.box div.row div.large-6 div.marktwertentwicklung  div > div.zeile-oben > div.right-td").text.strip,
       :date_current_market_value => player_doc.css("div.large-8 div.box div.row div.large-6 div.marktwertentwicklung  div > div.zeile-mitte > div.right-td").text.strip,
       :highest_market_value => player_doc.css("div.large-8 div.box div.row div.large-6 div.marktwertentwicklung  div > div.zeile-unten > div.right-td").text.strip.squeeze("  ").split(" \n ")[0],
       :date_highest_market_value => player_doc.css("div.large-8 div.box div.row div.large-6 div.marktwertentwicklung  div > div.zeile-unten > div.right-td").text.strip.squeeze("  ").split(" \n ")[1]
     }
     binding.pry
+    
+      if  player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Place of birth:')")
+        hash[:place_of_birth_city] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Place of birth:')+td span").text #strip.gsub!("&nbsp;&nbsp;","")
+      else 
+        hash[:place_of_birth_city] = "none"
+        
+        
+      hash[:place_of_birth_country] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td span img").attribute("title").value,
+      hash[:height] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[4].text.strip,
+      hash[:position] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[6].text.strip,
+      hash[:foot] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[7].text.strip,
+      hash[:date_joined] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[10].text.strip,
+      hash[:contract_exp] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[11].text.strip,
+      hash[:last_contract_ext] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[12].text.strip,
+    
+    
+    
     if player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Outfitter:')")
-      hash[:sponsor] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Outfitter:')+td")
+      hash[:sponsor] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Outfitter:')+td").text
     else
       hash[:sponsor] = "none"
     end 
     hash
+
+
+
+
+
 
   end 
   
