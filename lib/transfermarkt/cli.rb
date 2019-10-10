@@ -21,7 +21,7 @@ class Transfermarkt::CLIO
         if @id > 9
           display_previous_page
         else 
-          display_current_page
+          display_page
           puts "Please select a valid option."
           puts "Type '-h' for help"
         end 
@@ -36,6 +36,7 @@ class Transfermarkt::CLIO
             start 
           elsif choice =="n"
             goodbye
+            return
           else
             puts "Please enter 'y' or 'n'"
           end
@@ -73,27 +74,16 @@ class Transfermarkt::CLIO
   def display_next_page
     # prompt = TTY::Prompt.new
     @id += 10
-    
-    choices = Transfermarkt::Player.all.slice(@id..(@id+9)).map.with_index(@id + 1) do |player, i|
-      "#{i}. #{player.name}"
-    end 
-    choices += ["next","back"] 
-    @selection = @prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
-    
+    display_page
   end 
   
   def display_previous_page
     # prompt = TTY::Prompt.new
     @id -= 10
-
-    choices = Transfermarkt::Player.all.slice(@id..(@id+9)).map.with_index(@id + 1) do |player, i|
-      "#{i}. #{player.name}"
-    end 
-    choices += ["next","back"] 
-    @selection = @prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
+    display_page
   end 
     
-  def display_current_page
+  def display_page
     choices = Transfermarkt::Player.all.slice(@id..(@id+9)).map.with_index(@id + 1) do |player, i|
       "#{i}. #{player.name}"
     end 
@@ -134,8 +124,7 @@ class Transfermarkt::CLIO
   
   def goodbye 
     puts "Thanks for stopping by."
-    puts "Come back again soon to see the value of all your favorite players!"
-    
+    puts "Come back again soon to see the values of all your favorite players!"
   end 
 
 end 
