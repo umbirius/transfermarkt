@@ -10,28 +10,29 @@ class Transfermarkt::CLIO
     choices += ["next","back"]
     selection = prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
     
-    
-    if selection == "next" 
-      if Transfermarkt::Player.all.length == (@id + 10)
-        make_additional_players
-        binding.pry
-        display_next_page
-      else
-        display_next_page
-      end 
-    elsif input == "back"
-      if @id > 9
-        display_previous_page
+    while @selection != ""
+      if @selection == "next" 
+        if Transfermarkt::Player.all.length == (@id + 10)
+          make_additional_players
+          binding.pry
+          display_next_page
+        else
+          display_next_page
+        end 
+      elsif @selection == "back"
+        if @id > 9
+          display_previous_page
+        else 
+          display_current_page
+          puts "Please select a valid option."
+          puts "Type '-h' for help"
+        end 
       else 
-        display_current_page
-        puts "Please select a valid option."
-        puts "Type '-h' for help"
+        selection_i = @selection.delete('^0-9').to_i
+        @player =  Transfermarkt::Player.all[selection_i - 1]
+        add_player_bio
+        display_player_info
       end 
-    else 
-      selection_i = player.delete('^0-9').to_i
-      @player =  Transfermarkt::Player.all[selection_i - 1]
-      add_player_bio
-      display_player_info
     end 
   end 
 
@@ -60,20 +61,22 @@ class Transfermarkt::CLIO
     
     choices = Transfermarkt::Player.all.drop(@id).map.with_index(@id + 1) do |player, i|
       "#{i}. #{player.name}"
-    break if i > (@id + 10)
+  
     end 
-    binding.pry
     choices += ["next","back"] 
     selection = prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
     
   end 
   
   def display_previous_page
+    prompt = TTY::Prompt.new
     @id -= 10
-    Transfermarkt::Player.all.drop(@id).each.with_index(@id + 1) do |player, i|
-      break if i > (@id + 10)
-      puts "#{i}. #{player.name} - #{player.position} - #{player.club} - #{player.age} - #{player.nationality} - #{player.market_value} - #{player.agents}"
+    
+    choices = Transfermarkt::Player.all.drop(@id).map.with_index(@id + 1) do |player, i|
+      "#{i}. #{player.name}"
     end 
+    choices += ["next","back"] 
+    selection = prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
   end 
     
   def display_current_page
