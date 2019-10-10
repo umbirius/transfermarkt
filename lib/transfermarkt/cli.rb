@@ -8,12 +8,7 @@ class Transfermarkt::CLIO
   end 
 
   def call
-    input
-    make_players
-    @prompt = TTY::Prompt.new
-    choices  = (Transfermarkt::Player.all.map.with_index(1) {|player, i| "#{i}. #{player.name}"})
-    choices += ["next","back"]
-    @selection = @prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
+    start
     
     while @selection != ""
       if @selection == "next" 
@@ -36,8 +31,25 @@ class Transfermarkt::CLIO
         @player =  Transfermarkt::Player.all[selection_i - 1]
         add_player_bio
         display_player_info
+        reccur?
+          if reccur? =="y"
+            start 
+          elsif reccur? =="n"
+            goodbye
+          else
+            puts "Please enter 'y' or 'n'"
+          end
       end 
     end 
+  end 
+
+  def start 
+    input
+    make_players
+    @prompt = TTY::Prompt.new
+    choices  = (Transfermarkt::Player.all.map.with_index(1) {|player, i| "#{i}. #{player.name}"})
+    choices += ["next","back"]
+    @selection = @prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
   end 
 
   def input
@@ -89,8 +101,38 @@ class Transfermarkt::CLIO
     choices += ["next","back"] 
     @selection = @prompt.select("Choose your player?", choices, help: "(Bash keyboard)", symbols: {marker: '>'})
   end 
+  
+  def add_player_bio 
+    add_attr_hash = Transfermarkt::Scraper.player_profile(@player)
+    @player.add_attributes(add_attr_hash)
+    @player
+  end 
+    
+  def display_player_info
+    puts"------------------#{@player.header}---------------------"
+    puts "DOB:                     #{@player.date_of_birth}"
+    puts "Birth Place:             #{@player.place_of_birth_city}, #{@player.place_of_birth_country}"
+    puts "Age:                     #{@player.age}"
+    puts "Height:                  #{@player.height}"
+    puts "Position:                #{@player.position}"
+    puts "Preffered Foot:          #{@player.foot}"
+    puts "Agent:                   #{@player.agents}"
+    puts "Club:                    #{@player.club}"
+    puts "Date Joined:             #{@player.date_joined}"
+    puts "Contract Until:          #{@player.contract_exp}"
+    puts "Last Contract Ext.:      #{@player.last_contract_ext}"
+    puts "Athletic Sponsor:        #{@player.sponsor}"
+    puts "Current Market Value:    #{@player.current_market_value}"
+    puts "Last Updated:            #{@player.date_current_market_value}"
+    puts "Hightest Market Value:   #{@player.highest_market_value}"
+    puts "Date:                    #{@player.date_highest_market_value}"
   end 
   
+  def reccur?
+    prompt_recurr = TTY::Prompt.new
+    input = prompt1.ask("Would you like to search again (y/n)?")
+    input.strip.downcase
+  end 
   
   def select_category_results
     puts "please select which results you would like: players, managers/staff, or team"
