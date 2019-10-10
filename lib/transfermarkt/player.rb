@@ -29,5 +29,9 @@ class Transfermarkt::Player
     @@all 
   end 
   
+  def self.reset 
+    @@all = []
+  end 
+  
 end 
 

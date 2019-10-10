@@ -3,13 +3,12 @@
 class Transfermarkt::CLIO
   
   def initialize 
-    #welcome message 
+    puts "Welcome to the Transfer-market!"
     #create prompts? 
   end 
 
   def call
     start
-    
     while @selection != ""
       if @selection == "next" 
         if Transfermarkt::Player.all.length == (@id + 10)
@@ -31,10 +30,11 @@ class Transfermarkt::CLIO
         @player =  Transfermarkt::Player.all[selection_i - 1]
         add_player_bio
         display_player_info
-        reccur?
-          if reccur? =="y"
+        choice = reccur?
+          if choice =="y"
+            Transfermarkt::Player.reset
             start 
-          elsif reccur? =="n"
+          elsif choice =="n"
             goodbye
           else
             puts "Please enter 'y' or 'n'"
@@ -54,7 +54,6 @@ class Transfermarkt::CLIO
 
   def input
     prompt1 = TTY::Prompt.new
-    puts "Welcome to the Transfer-market!"
     @query = prompt1.ask("Enter a player:")
   end 
   
@@ -130,15 +129,14 @@ class Transfermarkt::CLIO
   
   def reccur?
     prompt_recurr = TTY::Prompt.new
-    input = prompt1.ask("Would you like to search again (y/n)?")
+    input = prompt_recurr.ask("Would you like to search again (y/n)?")
     input.strip.downcase
   end 
   
-  def select_category_results
-    puts "please select which results you would like: players, managers/staff, or team"
-    input = gets.strip
+  def goodbye 
+    puts "Thanks for stopping by."
+    puts "Come back again soon to see the value of all your favorite players!"
   end 
-  
 
 end 
 
