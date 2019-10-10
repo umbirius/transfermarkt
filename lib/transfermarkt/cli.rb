@@ -1,6 +1,7 @@
 #CLI controller 
 
 class Transfermarkt::CLIO
+  error = Pastel.new
   
   def initialize 
     puts "Welcome to the Transfer-market!"
@@ -8,6 +9,7 @@ class Transfermarkt::CLIO
   end 
 
   def call
+    error = Pastel.new
     start
     while @selection != ""
       if @selection == "next" && Transfermarkt::Scraper.next_url == true
@@ -18,27 +20,27 @@ class Transfermarkt::CLIO
           display_next_page
         end 
       elsif @selection == "next" && Transfermarkt::Scraper.next_url == nil
-        puts "There are no additional results."
+        puts error.red("There are no additional results. \nSelect 'back' or a player's name.")
         display_page
       elsif @selection == "back"
         if @id > 9
           display_previous_page
         else 
           display_page
-          puts "Please select a valid option."
+          puts error.red("You are on the first page.\nSelect 'next' or a player's name.")
         end 
       else 
         add_player_bio
         display_player_info
         choice = reccur?
-          if choice =="y"
+          if choice == "y"
             Transfermarkt::Player.reset
             start 
-          elsif choice =="n"
+          elsif choice == "n"
             goodbye
             return
           else
-            puts "Please enter 'y' or 'n'"
+            puts error.("Please enter 'y' or 'n'")
           end
       end 
     end 

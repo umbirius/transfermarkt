@@ -44,5 +44,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency "terminal-table"
   spec.add_dependency "tty"
   spec.add_dependency "pastel"
-  #spec.add_dependency "open-uri"
 end
