@@ -119,7 +119,6 @@ class Transfermarkt::CLIO
     puts "Club:                    #{@player.club}"
     puts "Date Joined:             #{@player.date_joined}"
     puts "Contract Until:          #{@player.contract_exp}"
-    puts "Last Contract Ext.:      #{@player.last_contract_ext}"
     puts "Athletic Sponsor:        #{@player.sponsor}"
     puts "Current Market Value:    #{@player.current_market_value}"
     puts "Last Updated:            #{@player.date_current_market_value}"
@@ -136,6 +135,7 @@ class Transfermarkt::CLIO
   def goodbye 
     puts "Thanks for stopping by."
     puts "Come back again soon to see the value of all your favorite players!"
+    
   end 
 
 end 

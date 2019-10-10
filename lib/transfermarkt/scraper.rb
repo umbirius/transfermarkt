@@ -31,35 +31,51 @@ class Transfermarkt::Scraper
       :highest_market_value => player_doc.css("div.large-8 div.box div.row div.large-6 div.marktwertentwicklung  div > div.zeile-unten > div.right-td").text.strip.squeeze("  ").split(" \n ")[0],
       :date_highest_market_value => player_doc.css("div.large-8 div.box div.row div.large-6 div.marktwertentwicklung  div > div.zeile-unten > div.right-td").text.strip.squeeze("  ").split(" \n ")[1]
     }
-    binding.pry
     
-      if  player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Place of birth:')")
+    if player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Place of birth:')")
         hash[:place_of_birth_city] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Place of birth:')+td span").text #strip.gsub!("&nbsp;&nbsp;","")
-      else 
-        hash[:place_of_birth_city] = "none"
-        
-        
-      hash[:place_of_birth_country] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td span img").attribute("title").value,
-      hash[:height] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[4].text.strip,
-      hash[:position] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[6].text.strip,
-      hash[:foot] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[7].text.strip,
-      hash[:date_joined] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[10].text.strip,
-      hash[:contract_exp] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[11].text.strip,
-      hash[:last_contract_ext] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td")[12].text.strip,
-    
-    
-    
+        hash[:place_of_birth_country] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td span img").attribute("title").value
+    else 
+        hash[:place_of_birth_city] = nil
+        hash[:place_of_birth_country] = nil
+    end 
+      
+    if player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Height:')")
+        hash[:height] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Height:')+td").text.strip
+    else 
+        hash[:height] = nil
+    end 
+      
+    if player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Position:')")
+        hash[:position] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Position:')+td").text.strip
+    else 
+        hash[:position] = nil
+    end 
+      
+    if player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Foot:')")
+        hash[:foot] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Foot:')+td").text.strip
+    else 
+        hash[:foot] = nil
+    end 
+      
+    if player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Joined:')")
+        hash[:date_joined] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Joined:')+td").text.strip
+    else 
+        hash[:date_joined] = nil
+    end 
+      
+    if player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Contract expires:')")
+        hash[:contract_exp] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Contract expires:')+td").text.strip
+    else 
+        hash[:contract_exp] = nil
+      end 
+      
     if player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Outfitter:')")
       hash[:sponsor] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Outfitter:')+td").text
     else
       hash[:sponsor] = "none"
     end 
     hash
-
-
-
-
-
 
   end 
   
@@ -94,10 +110,5 @@ class Transfermarkt::Scraper
     players
   end 
   
-  def self.scrape_managers_staff
-  end
-  
-  def self.scrape_teams
-  end
   
 end
