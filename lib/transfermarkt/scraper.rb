@@ -75,6 +75,12 @@ class Transfermarkt::Scraper
     else
       hash[:sponsor] = "none"
     end 
+    
+    if player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th>a.vereinprofil_tooltip tooltipstered")
+      hash[:club] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>td>a.vereinprofil_tooltip").text
+    else
+      hash[:club] = "none"
+    end 
     hash
 
   end 
@@ -96,8 +102,8 @@ class Transfermarkt::Scraper
       
           players << {
             :name => player.css("td.hauptlink a").text, 
-            :position => player.css("td.zentriert").first.text,
-            :club => player.css("a.vereinprofil_tooltip").text,
+            # :position => player.css("td.zentriert").first.text,
+            # :club => player.css("a.vereinprofil_tooltip").text,
             :age => player.css("td.zentriert")[2].text,
             :nationality => player.css("td.zentriert img")[1].attribute("title").value,
             :market_value => player.css("td.rechts").first.text,
