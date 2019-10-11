@@ -319,18 +319,22 @@ class Transfermarkt::CLIX
 
   def call
     error = Pastel.new
-
+          start
     @input = ''
     while @input != "exit"
-      start
+
       make_players
       display_first_page
       if @input.to_i > 0
         add_player_bio
         display_player_info
+      elsif @input == "next" 
       
+          make_additional_players
+          display_next_page
+          
+  
       end 
-      Transfermarkt::Player.reset
     end 
   end 
   
@@ -352,10 +356,7 @@ class Transfermarkt::CLIX
   
   def display_first_page
     @id = 0
-        choices  = (Transfermarkt::Player.all.map.with_index(1) {|player, i| "#{i}. #{player.name}"})
-    choices.each {|c| puts c}
-    puts "Select a player"
-    @input = gets.strip
+  display_page
   end 
   
   def display_next_page
@@ -372,7 +373,9 @@ class Transfermarkt::CLIX
     choices = Transfermarkt::Player.all.slice(@id..(@id+9)).map.with_index(@id + 1) do |player, i|
       "#{i}. #{player.name}"
     end 
-    puts "Choose your player?"
+    choices.each {|c| puts c}
+    puts "Pick a player you would like more info on. \n -next for next page \n -back for last page"
+    @input = gets.strip
   end 
   
   def add_player_bio 
