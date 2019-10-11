@@ -364,10 +364,10 @@ class Transfermarkt::CLIX
       puts "Enter a player: "
       @query = gets.strip
       make_players
-      if Transfermarkt::Player.all > 0
+      if Transfermarkt::Player.all.length > 0
         display_first_page
       else
-        puts "There are no search results. Please enter another player:"
+        puts "There are no valid search results. Try again."
       end 
     end
   end 
