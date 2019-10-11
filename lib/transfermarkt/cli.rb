@@ -353,16 +353,23 @@ class Transfermarkt::CLIX
         break
       else
         puts "Please enter valid option"
+        puts "Pick a player you would like more info on. \n next- for next page \n back- for last page \n exit- leave program"
         @input = gets.strip
       end 
     end 
   end 
   
-  def start 
-    puts "Enter a player: "
-    @query = gets.strip
-    make_players    
-    display_first_page
+  def start
+    while @query != ""
+      puts "Enter a player: "
+      @query = gets.strip
+      make_players
+      if Transfermarkt::Player.all > 0
+        display_first_page
+      else
+        puts "There are no search results. Please enter another player:"
+      end 
+    end
   end 
 
   def make_players
