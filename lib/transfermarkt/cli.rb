@@ -322,7 +322,7 @@ class Transfermarkt::CLIX
     @input = ''
     start
     while @input != "exit"
-      if @input.to_i > 0 && @input.to_i < (Transfermarkt::Player.all.length +1)
+      if @input.to_i > @id && @input.to_i < ((Transfermarkt::Player.all.length) +1)
         add_player_bio
         display_player_info
         reccur?
@@ -383,7 +383,7 @@ class Transfermarkt::CLIX
   
   def display_first_page
     @id = 0
-  display_page
+    display_page
   end 
   
   def display_next_page
