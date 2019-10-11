@@ -19,6 +19,10 @@ class Transfermarkt::Scraper
       end 
   end 
   
+  def self.error
+    self.next_url
+  end 
+  
   def self.player_profile(player)
     player_url = player.url
     player_doc = Nokogiri::HTML(open(player_url))

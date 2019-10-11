@@ -12,16 +12,17 @@ class Transfermarkt::CLIO
     error = Pastel.new
     start
     while @selection != ""
-      if @selection == "next" && Transfermarkt::Scraper.next_url == true
+      if @selection == "next"
+        # && Transfermarkt::Scraper.next_url == true
         if Transfermarkt::Player.all.length == (@id + 10)
           make_additional_players
           display_next_page
         else
           display_next_page
         end 
-      elsif @selection == "next" && Transfermarkt::Scraper.next_url == nil
-        puts error.red("There are no additional results. \nSelect 'back' or a player's name.")
-        display_page
+      # elsif @selection == "next" && Transfermarkt::Scraper.next_url == nil
+      #   puts error.red("There are no additional results. \nSelect 'back' or a player's name.")
+      #   display_page
       elsif @selection == "back"
         if @id > 9
           display_previous_page
@@ -305,5 +306,131 @@ class Transfermarkt::CLI
     puts "back - shows last page of results"
     puts "list - shows current search results"
   end 
+  
+end 
+
+class Transfermarkt::CLIX
+  error = Pastel.new
+  
+  def initialize 
+    puts "Welcome to the Transfer-market!"
+    #create prompts? 
+  end 
+
+  def call
+    error = Pastel.new
+    start
+    while @selection != ""
+      if @selection == "next"
+        # && Transfermarkt::Scraper.next_url == true
+        if Transfermarkt::Player.all.length == (@id + 10)
+          make_additional_players
+          display_next_page
+        else
+          display_next_page
+        end 
+      # elsif @selection == "next" && Transfermarkt::Scraper.next_url == nil
+      #   puts error.red("There are no additional results. \nSelect 'back' or a player's name.")
+      #   display_page
+      elsif @selection == "back"
+        if @id > 9
+          display_previous_page
+        else 
+          display_page
+          puts error.red("You are on the first page.\nSelect 'next' or a player's name.")
+        end 
+      else 
+        add_player_bio
+        display_player_info
+        choice = reccur?
+          if choice == "y"
+            Transfermarkt::Player.reset
+            start 
+          elsif choice == "n"
+            goodbye
+            return
+          else
+            puts error.("Please enter 'y' or 'n'")
+          end
+      end 
+    end 
+  end 
+  
+  def start 
+    @query = gets.strip
+    make_players
+    choices  = (Transfermarkt::Player.all.map.with_index(1) {|player, i| "#{i}. #{player.name}"})
+    choices.each {|c| c}
+    puts "Select a player"
+    @selection = gets.strip.to_i
+  end 
+
+  def make_players
+    @id = 0
+    Transfermarkt::Scraper.set_doc(@query)
+    players_array = Transfermarkt::Scraper.scrape_players
+    Transfermarkt::Player.create_from_collection(players_array)
+  end 
+  
+  def make_additional_players
+    next_page_player_array = Transfermarkt::Scraper.scrape_next_page
+    Transfermarkt::Player.create_from_collection(next_page_player_array)
+  end 
+  
+  def display_next_page
+    @id += 10
+    display_page
+  end 
+  
+  def display_previous_page
+    @id -= 10
+    display_page
+  end 
+    
+  def display_page
+    choices = Transfermarkt::Player.all.slice(@id..(@id+9)).map.with_index(@id + 1) do |player, i|
+      "#{i}. #{player.name}"
+    end 
+    puts "Choose your player?"
+  end 
+  
+  def add_player_bio 
+    @player =  Transfermarkt::Player.all[@selection - 1]
+    add_attr_hash = Transfermarkt::Scraper.player_profile(@player)
+    @player.add_attributes(add_attr_hash)
+    @player
+  end 
+    
+  def display_player_info
+    puts"------------------#{@player.header}---------------------"
+
+    puts "DOB:                     #{@player.date_of_birth}"
+    puts "Birth Place:             #{@player.place_of_birth_city}, #{@player.place_of_birth_country}"
+    puts "Age:                     #{@player.age}"
+    puts "Height:                  #{@player.height}"
+    puts "Position:                #{@player.position}"
+    puts "Preffered Foot:          #{@player.foot}"
+    puts "Agent:                   #{@player.agents}"
+    puts "Club:                    #{@player.club}"
+    puts "Date Joined:             #{@player.date_joined}"
+    puts "Contract Until:          #{@player.contract_exp}"
+    puts "Athletic Sponsor:        #{@player.sponsor}"
+    puts "Current Market Value:    #{@player.current_market_value}"
+    puts "Last Updated:            #{@player.date_current_market_value}"
+    puts "Hightest Market Value:   #{@player.highest_market_value}"
+    puts "Date:                    #{@player.date_highest_market_value}"
+  end 
+  
+  def reccur?
+    prompt_recurr = TTY::Prompt.new
+    input = prompt_recurr.ask("Would you like to search again (y/n)?")
+    input.strip.downcase
+  end 
+  
+  def goodbye 
+    puts "Thanks for stopping by."
+    puts "Come back again soon to see the values of all your favorite players!"
+  end 
+
   
 end 
