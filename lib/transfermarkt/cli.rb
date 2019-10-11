@@ -313,12 +313,12 @@ class Transfermarkt::CLIX
   error = Pastel.new
   
   def initialize 
-    puts "Welcome to the Transfer-market!"
-    #create prompts? 
+    @error = Pastel.new
+    @prompt = Pastel.new
+    puts @prompt.yellow.bold.underline("Welcome to the Transfer-market!")
   end 
 
   def call
-    @error = Pastel.new
     @input = ''
     start
     while @input != "exit"
@@ -335,7 +335,7 @@ class Transfermarkt::CLIX
             goodbye
             return
           else 
-            puts "Please enter 'y' or 'n'"
+            puts @error.red("Please enter 'y' or 'n'")
             reccur?
           end 
         end 
@@ -367,14 +367,14 @@ class Transfermarkt::CLIX
   
   def start
     while @query != ""
-      puts "Enter a player: "
+      puts @prompt.yellow("Enter a player: ")
       @query = gets.strip
       make_players
       if Transfermarkt::Player.all.length > 0
         display_first_page
         break
       else
-        puts @error.("There are no valid search results. Try again.")
+        puts @error.red("There are no valid search results. Try again.")
       end 
     end
 
@@ -409,9 +409,10 @@ class Transfermarkt::CLIX
   def display_page
     choices = Transfermarkt::Player.all.slice(@id..(@id+9)).map.with_index(@id + 1) do |player, i|
       "#{i}. #{player.name}"
-    end 
+    end
+    puts @prompt.yellow.bold.underline("        Results         ")
     choices.each {|c| puts c}
-    puts "Pick a player you would like more info on. \nnext- for next page \nback- for last page \nexit- leave program"
+    puts @prompt.bright_magenta("Pick a player you would like more info on.\nnext- for next page \nback- for last page \nexit- leave program")
     @input = gets.strip
   end 
   
