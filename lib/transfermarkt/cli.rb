@@ -319,44 +319,18 @@ class Transfermarkt::CLIX
 
   def call
     error = Pastel.new
-    start
-    input = ''
+
+    @input = ''
     while @input != "exit"
+      start
       make_players
-      if @input.to_i < 0
-        display_first_page
-      elsif @input == "next"
-        # && Transfermarkt::Scraper.next_url == true
-        if Transfermarkt::Player.all.length == (@id + 10)
-          make_additional_players
-          display_next_page
-        else
-          display_next_page
-        end 
-      # elsif @selection == "next" && Transfermarkt::Scraper.next_url == nil
-      #   puts error.red("There are no additional results. \nSelect 'back' or a player's name.")
-      #   display_page
-      elsif @input == "back"
-        if @id > 9
-          display_previous_page
-        else 
-          display_page
-          puts error.red("You are on the first page.\nSelect 'next' or a player's name.")
-        end 
-      else 
+      display_first_page
+      if @input.to_i > 0
         add_player_bio
         display_player_info
-        choice = reccur?
-          if choice == "y"
-            Transfermarkt::Player.reset
-            start 
-          elsif choice == "n"
-            goodbye
-            return
-          else
-            puts error.("Please enter 'y' or 'n'")
-          end
+      
       end 
+      Transfermarkt::Player.reset
     end 
   end 
   
@@ -402,7 +376,7 @@ class Transfermarkt::CLIX
   end 
   
   def add_player_bio 
-    @player =  Transfermarkt::Player.all[@input - 1]
+    @player =  Transfermarkt::Player.all[@input.to_i - 1]
     add_attr_hash = Transfermarkt::Scraper.player_profile(@player)
     @player.add_attributes(add_attr_hash)
     @player
