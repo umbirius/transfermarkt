@@ -412,7 +412,8 @@ class Transfermarkt::CLIX
     end
     puts @prompt.yellow.bold.underline("        Results         ")
     choices.each {|c| puts c}
-    puts @prompt.bright_magenta("Pick a player you would like more info on.\nnext- for next page \nback- for last page \nexit- leave program")
+    puts @prompt.yellow("Pick a player you would like more info on.")
+    puts @prompt.bright_magenta("next- for next page \nback- for last page \nexit- leave program")
     @input = gets.strip
   end 
   
@@ -424,34 +425,34 @@ class Transfermarkt::CLIX
   end 
     
   def display_player_info
-    puts"------------------#{@player.header}---------------------"
-
-    puts "DOB:                     #{@player.date_of_birth}"
-    puts "Birth Place:             #{@player.place_of_birth_city}, #{@player.place_of_birth_country}"
-    puts "Age:                     #{@player.age}"
-    puts "Height:                  #{@player.height}"
-    puts "Position:                #{@player.position}"
-    puts "Preffered Foot:          #{@player.foot}"
-    puts "Agent:                   #{@player.agents}"
-    puts "Club:                    #{@player.club}"
-    puts "Date Joined:             #{@player.date_joined}"
-    puts "Contract Until:          #{@player.contract_exp}"
-    puts "Athletic Sponsor:        #{@player.sponsor}"
-    puts "Current Market Value:    #{@player.current_market_value}"
-    puts "Last Updated:            #{@player.date_current_market_value}"
-    puts "Hightest Market Value:   #{@player.highest_market_value}"
-    puts "Date:                    #{@player.date_highest_market_value}"
+    display = @prompt.blue.bold.detach
+    display2 = @prompt.white.detach
+    puts @prompt.yellow.bold.underline("-----------------#{@player.header}-----------------")
+    puts (display.("DOB:                     ") + display2.("#{@player.date_of_birth}"))
+    puts (display.("Birth Place:             ") + display2.("#{@player.place_of_birth_city}, #{@player.place_of_birth_country}"))
+    puts (display.("Age:                     ") + display2.("#{@player.age}"))
+    puts (display.("Height:                  ") + display2.("#{@player.height}"))
+    puts (display.("Position:                ") + display2.("#{@player.position}"))
+    puts (display.("Preffered Foot:          ") + display2.("#{@player.foot}"))
+    puts (display.("Agent:                   ") + display2.("#{@player.agents}"))
+    puts (display.("Club:                    ") + display2.("#{@player.club}"))
+    puts (display.("Date Joined:             ") + display2.("#{@player.date_joined}"))
+    puts (display.("Contract Until:          ") + display2.("#{@player.contract_exp}"))
+    puts (display.("Athletic Sponsor:        ") + display2.("#{@player.sponsor}"))
+    puts (display.("Current Market Value:    ") + display2.("#{@player.current_market_value}"))
+    puts (display.("Last Updated:            ") + display2.("#{@player.date_current_market_value}"))
+    puts (display.("Hightest Market Value:   ") + display2.("#{@player.highest_market_value}"))
+    puts (display.("Date:                    ") + display2.("#{@player.date_highest_market_value}"))
   end 
   
   def reccur?
-    prompt_recurr = TTY::Prompt.new
-    puts "Would you like to search again (y/n)?"
+    puts @prompt.yellow("Would you like to search again (y/n)?")
     @input = gets.strip.downcase
   end 
   
   def goodbye 
-    puts "Thanks for stopping by."
-    puts "Come back again soon to see the values of all your favorite players!"
+    puts @prompt.yellow("Thanks for stopping by.")
+    puts @prompt.yellow("Come back again soon to see the values of all your favorite players!")
   end 
 
   
