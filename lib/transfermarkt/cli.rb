@@ -41,7 +41,7 @@ class Transfermarkt::CLIO
             goodbye
             return
           else
-            puts error.("Please enter 'y' or 'n'")
+            puts error.red("Please enter 'y' or 'n'")
           end
       end 
     end 
@@ -318,7 +318,7 @@ class Transfermarkt::CLIX
   end 
 
   def call
-    error = Pastel.new
+    @error = Pastel.new
     @input = ''
     start
     while @input != "exit"
@@ -347,19 +347,19 @@ class Transfermarkt::CLIX
           display_next_page
         end
       elsif Transfermarkt::Scraper.next_url == nil
-        puts "There are no additional results."
-        puts "Please enter valid option."
+        puts @error.red("There are no additional results.")
+        puts @error.red("Please enter valid option.")
         @input = gets.strip
       elsif @input == "back"
         if @id > 9
           display_previous_page
         else
-          puts "You are on the first page."
-          puts "Please enter valid option."
+          puts @error.red("You are on the first page.")
+          puts @error.red("Please enter valid option.")
           @input = gets.strip
         end 
       else
-        puts "Please enter valid option."
+        puts @error.red("Please enter valid option.")
         @input = gets.strip
       end 
     end 
@@ -374,7 +374,7 @@ class Transfermarkt::CLIX
         display_first_page
         break
       else
-        puts "There are no valid search results. Try again."
+        puts @error.("There are no valid search results. Try again.")
       end 
     end
 
@@ -411,7 +411,7 @@ class Transfermarkt::CLIX
       "#{i}. #{player.name}"
     end 
     choices.each {|c| puts c}
-    puts "Pick a player you would like more info on. \n next- for next page \n back- for last page \n exit- leave program"
+    puts "Pick a player you would like more info on. \nnext- for next page \nback- for last page \nexit- leave program"
     @input = gets.strip
   end 
   
