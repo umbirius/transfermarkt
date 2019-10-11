@@ -327,6 +327,7 @@ class Transfermarkt::CLIX
         display_player_info
         reccur?
         if @input == "y"
+          Transfermarkt::Player.reset
           start 
         elsif @input =="n"
           goodbye
