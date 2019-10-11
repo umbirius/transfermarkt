@@ -322,7 +322,7 @@ class Transfermarkt::CLIX
     @input = ''
     start
     while @input != ""
-      if @input.to_i > 0
+      if @input.to_i > 0 && @input.to_i < Transfermarkt::Player.all.length
         add_player_bio
         display_player_info
         reccur?
@@ -350,7 +350,7 @@ class Transfermarkt::CLIX
         break
       else 
         puts "Please enter valid option"
-  
+        display_page
       end 
     end 
   end 
