@@ -319,14 +319,22 @@ class Transfermarkt::CLIX
 
   def call
     error = Pastel.new
-    start
-    make_players    
     @input = ''
-    display_first_page
+    start
     while @input != "exit"
       if @input.to_i > 0
         add_player_bio
         display_player_info
+      while @input != ""
+        reccur?
+        if @input == "y"
+          start 
+        elsif @input =="n"
+          goodbye
+        else 
+          puts "Please enter 'y' or 'n'"
+        end 
+      end 
       elsif @input == "next" 
         if Transfermarkt::Player.all.length == (@id+10)
           make_additional_players
@@ -347,6 +355,8 @@ class Transfermarkt::CLIX
   def start 
     puts "Enter a player: "
     @query = gets.strip
+    make_players    
+    display_first_page
   end 
 
   def make_players
