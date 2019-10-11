@@ -320,8 +320,12 @@ class Transfermarkt::CLIX
   def call
     error = Pastel.new
     start
-    while @selection != ""
-      if @selection == "next"
+    input = ''
+    while @input != "exit"
+      make_players
+      if @input.to_i < 0
+        display_first_page
+      elsif @input == "next"
         # && Transfermarkt::Scraper.next_url == true
         if Transfermarkt::Player.all.length == (@id + 10)
           make_additional_players
@@ -332,7 +336,7 @@ class Transfermarkt::CLIX
       # elsif @selection == "next" && Transfermarkt::Scraper.next_url == nil
       #   puts error.red("There are no additional results. \nSelect 'back' or a player's name.")
       #   display_page
-      elsif @selection == "back"
+      elsif @input == "back"
         if @id > 9
           display_previous_page
         else 
@@ -357,16 +361,11 @@ class Transfermarkt::CLIX
   end 
   
   def start 
+    puts "Enter a player: "
     @query = gets.strip
-    make_players
-    choices  = (Transfermarkt::Player.all.map.with_index(1) {|player, i| "#{i}. #{player.name}"})
-    choices.each {|c| c}
-    puts "Select a player"
-    @selection = gets.strip.to_i
   end 
 
   def make_players
-    @id = 0
     Transfermarkt::Scraper.set_doc(@query)
     players_array = Transfermarkt::Scraper.scrape_players
     Transfermarkt::Player.create_from_collection(players_array)
@@ -375,6 +374,14 @@ class Transfermarkt::CLIX
   def make_additional_players
     next_page_player_array = Transfermarkt::Scraper.scrape_next_page
     Transfermarkt::Player.create_from_collection(next_page_player_array)
+  end 
+  
+  def display_first_page
+    @id = 0
+        choices  = (Transfermarkt::Player.all.map.with_index(1) {|player, i| "#{i}. #{player.name}"})
+    choices.each {|c| puts c}
+    puts "Select a player"
+    @input = gets.strip
   end 
   
   def display_next_page
@@ -395,7 +402,7 @@ class Transfermarkt::CLIX
   end 
   
   def add_player_bio 
-    @player =  Transfermarkt::Player.all[@selection - 1]
+    @player =  Transfermarkt::Player.all[@input - 1]
     add_attr_hash = Transfermarkt::Scraper.player_profile(@player)
     @player.add_attributes(add_attr_hash)
     @player
