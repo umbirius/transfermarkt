@@ -321,7 +321,7 @@ class Transfermarkt::CLIX
     error = Pastel.new
     @input = ''
     start
-    while @input != ""
+    while @input != "exit"
       if @input.to_i > 0 && @input.to_i < Transfermarkt::Player.all.length
         add_player_bio
         display_player_info
@@ -329,7 +329,8 @@ class Transfermarkt::CLIX
         while @input != 'y' || @input != 'n'
           if @input == "y"
             Transfermarkt::Player.reset
-            start 
+            start
+            break
           elsif @input =="n"
             goodbye
             return
@@ -348,9 +349,6 @@ class Transfermarkt::CLIX
         end 
       elsif @input == "back"
         display_previous_page
-      elsif @input == "exit"
-        goodbye 
-        break
       else
         puts "Please enter valid option"
         puts "Pick a player you would like more info on. \n next- for next page \n back- for last page \n exit- leave program"
@@ -366,10 +364,12 @@ class Transfermarkt::CLIX
       make_players
       if Transfermarkt::Player.all.length > 0
         display_first_page
+        break
       else
         puts "There are no valid search results. Try again."
       end 
     end
+
   end 
 
   def make_players
