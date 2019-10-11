@@ -326,15 +326,17 @@ class Transfermarkt::CLIX
         add_player_bio
         display_player_info
         reccur?
-        if @input == "y"
-          Transfermarkt::Player.reset
-          start 
-        elsif @input =="n"
-          goodbye
-          break
-        else 
-          puts "Please enter 'y' or 'n'"
-          reccur?
+        while @input != 'y' || @input != 'n'
+          if @input == "y"
+            Transfermarkt::Player.reset
+            start 
+          elsif @input =="n"
+            goodbye
+            return
+          else 
+            puts "Please enter 'y' or 'n'"
+            reccur?
+          end 
         end 
       elsif @input == "next" 
         if Transfermarkt::Player.all.length == (@id+10)
@@ -349,9 +351,9 @@ class Transfermarkt::CLIX
       elsif @input == "exit"
         goodbye 
         break
-      else 
+      else
         puts "Please enter valid option"
-        display_page
+        @input = gets.strip
       end 
     end 
   end 
