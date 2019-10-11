@@ -322,7 +322,7 @@ class Transfermarkt::CLIX
     @input = ''
     start
     while @input != "exit"
-      if @input.to_i > 0 && @input.to_i < Transfermarkt::Player.all.length
+      if @input.to_i > 0 && @input.to_i < (Transfermarkt::Player.all.length +1)
         add_player_bio
         display_player_info
         reccur?
@@ -343,7 +343,6 @@ class Transfermarkt::CLIX
         if Transfermarkt::Player.all.length == (@id+10)
           make_additional_players
           display_next_page
-        
         else 
           display_next_page
         end 
@@ -351,7 +350,6 @@ class Transfermarkt::CLIX
         display_previous_page
       else
         puts "Please enter valid option"
-        puts "Pick a player you would like more info on. \n next- for next page \n back- for last page \n exit- leave program"
         @input = gets.strip
       end 
     end 
