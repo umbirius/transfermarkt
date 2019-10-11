@@ -38,9 +38,13 @@ class Transfermarkt::Scraper
     
     if player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Place of birth:')")
         hash[:place_of_birth_city] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Place of birth:')+td span").text #strip.gsub!("&nbsp;&nbsp;","")
-        hash[:place_of_birth_country] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td span img").attribute("title").value
     else 
         hash[:place_of_birth_city] = nil
+    end 
+    
+    if player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr>th:contains('Place of birth:')+td span img").attribute("title")
+        hash[:place_of_birth_country] = player_doc.css("div.large-8 div.box div.row div.spielerdaten table.auflistung tr td span img").attribute("title").value
+    else 
         hash[:place_of_birth_country] = nil
     end 
       
@@ -113,7 +117,7 @@ class Transfermarkt::Scraper
             :nationality => player.css("td.zentriert img")[1].attribute("title").value,
             :market_value => player.css("td.rechts").first.text,
             :agents => player.css("td.rechts a").text,
-            :url => "https://www.transfermarkt.com" + player.css("td.hauptlink a").attribute("href").value
+            :url => "https://www.transfermarkt.com" + player.css("td.hauptlink>a").attribute("href").value
           }
           
       end 

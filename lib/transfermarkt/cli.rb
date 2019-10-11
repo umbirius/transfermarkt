@@ -319,20 +319,26 @@ class Transfermarkt::CLIX
 
   def call
     error = Pastel.new
-          start
+    start
+    make_players    
     @input = ''
+    display_first_page
     while @input != "exit"
-
-      make_players
-      display_first_page
       if @input.to_i > 0
         add_player_bio
         display_player_info
       elsif @input == "next" 
-      
+        if Transfermarkt::Player.all.length == (@id+10)
           make_additional_players
           display_next_page
-          
+        
+        else 
+          display_next_page
+        end 
+      elsif @input == "back"
+        display_previous_page
+      else 
+        puts "Please enter valid option"
   
       end 
     end 
@@ -374,7 +380,7 @@ class Transfermarkt::CLIX
       "#{i}. #{player.name}"
     end 
     choices.each {|c| puts c}
-    puts "Pick a player you would like more info on. \n -next for next page \n -back for last page"
+    puts "Pick a player you would like more info on. \n next- for next page \n back- for last page \n exit- leave program"
     @input = gets.strip
   end 
   
@@ -407,8 +413,8 @@ class Transfermarkt::CLIX
   
   def reccur?
     prompt_recurr = TTY::Prompt.new
-    input = prompt_recurr.ask("Would you like to search again (y/n)?")
-    input.strip.downcase
+    puts "Would you like to search again (y/n)?"
+    @input = gets.strip.downcase
   end 
   
   def goodbye 
