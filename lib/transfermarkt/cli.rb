@@ -321,20 +321,20 @@ class Transfermarkt::CLIX
     error = Pastel.new
     @input = ''
     start
-    while @input != "exit"
+    while @input != ""
       if @input.to_i > 0
         add_player_bio
         display_player_info
-      while @input != ""
         reccur?
         if @input == "y"
           start 
         elsif @input =="n"
           goodbye
+          break
         else 
           puts "Please enter 'y' or 'n'"
+          reccur?
         end 
-      end 
       elsif @input == "next" 
         if Transfermarkt::Player.all.length == (@id+10)
           make_additional_players
@@ -345,6 +345,9 @@ class Transfermarkt::CLIX
         end 
       elsif @input == "back"
         display_previous_page
+      elsif @input == "exit"
+        goodbye 
+        break
       else 
         puts "Please enter valid option"
   
