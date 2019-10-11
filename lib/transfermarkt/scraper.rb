@@ -16,7 +16,8 @@ class Transfermarkt::Scraper
        "https://www.transfermarkt.com" + next_btn.attribute("href").value
       else 
         nil
-      end 
+      end
+    
   end 
   
   def self.error

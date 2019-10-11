@@ -339,17 +339,27 @@ class Transfermarkt::CLIX
             reccur?
           end 
         end 
-      elsif @input == "next" 
+      elsif @input == "next" && Transfermarkt::Scraper.next_url != nil
         if Transfermarkt::Player.all.length == (@id+10)
           make_additional_players
           display_next_page
         else 
           display_next_page
-        end 
+        end
+      elsif Transfermarkt::Scraper.next_url == nil
+        puts "There are no additional results."
+        puts "Please enter valid option."
+        @input = gets.strip
       elsif @input == "back"
-        display_previous_page
+        if @id > 9
+          display_previous_page
+        else
+          puts "You are on the first page."
+          puts "Please enter valid option."
+          @input = gets.strip
+        end 
       else
-        puts "Please enter valid option"
+        puts "Please enter valid option."
         @input = gets.strip
       end 
     end 
