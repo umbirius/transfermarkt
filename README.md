@@ -27,7 +27,12 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+1 - Enter the name of your favorite player. 
+2 - Select a player from the search results 
+3 - View details on player 
+4 - Search again or exit out 
+
+Enjoy!
 
 ## Development
 
