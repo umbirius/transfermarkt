@@ -363,6 +363,7 @@ class Transfermarkt::CLIX
         @input = gets.strip
       end 
     end 
+    goodbye
   end 
   
   def start
@@ -412,8 +413,8 @@ class Transfermarkt::CLIX
     end
     puts @prompt.yellow.bold.underline("        Results         ")
     choices.each {|c| puts c}
-    puts @prompt.yellow("Pick a player you would like more info on.")
-    puts @prompt.bright_magenta("next- for next page \nback- for last page \nexit- leave program")
+    puts @prompt.yellow("Enter the number of a player you would like more info on.")
+    puts @prompt.bright_magenta("next- for next page \nback- for previous page \nexit- leave program")
     @input = gets.strip
   end 
   
