@@ -3,9 +3,11 @@ change
 
 # Transfermarkt
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/transfermarkt`. To experiment with that code, run `bin/console` for an interactive prompt.
+Welcome to the Transfer-market! where you can find the value and a bunch of other details of your favorite soccer players. 
 
-TODO: Delete this and the text above, and describe your gem
+This gem provides the user the ability to look up a soccer player by their name, scroll the results, and select whomever he/she desires. Once the user selects the player, the gem will return a list of specific information relative to the player and ask them if they would like to search again. 
+
+I hope you discover the values of all your favorite players! Enjoy!
 
 ## Installation
 
