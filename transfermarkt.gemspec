@@ -32,6 +32,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry"
   
   spec.add_dependency "nokogiri"
-  spec.add_dependency "tty"
   spec.add_dependency "pastel"
 end
