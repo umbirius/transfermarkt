@@ -1,10 +1,8 @@
 
-
 class Transfermarkt::Scraper 
- 
- attr_accessor :doc, :url, :new_url
-
   
+  attr_accessor :doc, :url
+
   def self.set_doc(query)
     @url = "https://www.transfermarkt.us/schnellsuche/ergebnis/schnellsuche?query=#{query}&x=0&y=0"
     @doc = Nokogiri::HTML(open(@url))

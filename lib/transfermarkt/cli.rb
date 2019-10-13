@@ -1,4 +1,3 @@
-#CLI controller 
 
 class Transfermarkt::CLI
   error = Pastel.new
