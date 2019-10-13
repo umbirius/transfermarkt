@@ -346,7 +346,7 @@ class Transfermarkt::CLIX
         else 
           display_next_page
         end
-      elsif Transfermarkt::Scraper.next_url == nil
+      elsif @input == "next" && Transfermarkt::Scraper.next_url == nil
         puts @error.red("There are no additional results.")
         puts @error.red("Please enter valid option.")
         @input = gets.strip
