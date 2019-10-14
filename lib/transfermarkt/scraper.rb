@@ -1,4 +1,4 @@
-
+require "pry"
 class Transfermarkt::Scraper 
   
   attr_accessor :doc, :url
@@ -6,6 +6,10 @@ class Transfermarkt::Scraper
   def self.set_doc(query)
     @url = "https://www.transfermarkt.us/schnellsuche/ergebnis/schnellsuche?query=#{query}&x=0&y=0"
     @doc = Nokogiri::HTML(open(@url))
+  end 
+  
+  def self.scrape_results_header
+    header = @doc.css("#main > div:nth-child(9) >div > div > div.table-header").text.squeeze(" ").split("-")[1].strip
   end 
   
   def self.scrape_players

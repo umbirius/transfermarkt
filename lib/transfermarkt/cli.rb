@@ -1,4 +1,4 @@
-
+require 'pry'
 class Transfermarkt::CLI
   error = Pastel.new
   
@@ -86,6 +86,7 @@ class Transfermarkt::CLI
   
   def display_first_page
     @id = 0
+    @total_results = Transfermarkt::Scraper.scrape_results_header
     display_page
   end 
   
@@ -103,10 +104,14 @@ class Transfermarkt::CLI
     choices = Transfermarkt::Player.all.slice(@id..(@id+9)).map.with_index(@id + 1) do |player, i|
       "#{i}. #{player.name}"
     end
-    puts @prompt.yellow.bold.underline("        Results         ")
+    if Transfermarkt::Scraper.next_url == nil
+      puts @prompt.yellow.bold.underline(("        Results") + " - #{Transfermarkt::Player.all.length} of #{@total_results}       ")
+    else 
+      puts @prompt.yellow.bold.underline(("        Results") + " - #{(@id+10)} of #{@total_results}       ")
+    end 
     choices.each {|c| puts c}
     puts @prompt.yellow("Enter the number of a player you would like more info on.")
-    puts @prompt.bright_magenta("next- for next page \nback- for previous page \nexit- leave program")
+    puts @prompt.bright_magenta("next - for next page \nback - for previous page \nexit - leave program")
     @input = gets.strip
   end 
   
