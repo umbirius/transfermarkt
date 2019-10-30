@@ -1,11 +1,13 @@
 require 'pry'
 class Transfermarkt::CLI
-  error = Pastel.new
   
   def initialize 
     @error = Pastel.new
     @prompt = Pastel.new
-    puts @prompt.yellow.bold.underline("Welcome to the Transfer-market!")
+    
+    puts @prompt.yellow.bold.underline(" Welcome to the Transfer-market! ")
+    puts @prompt.bright_blue("Here you can find the values of\nall your favorite soccer players.\n")
+
   end 
   
   def error 
@@ -60,7 +62,7 @@ class Transfermarkt::CLI
   
   def start
     while @query != ""
-      puts @prompt.yellow("Enter a player: ")
+      puts @prompt.yellow("Enter a player's name: ")
       @query = gets.strip
       make_players
       if Transfermarkt::Player.all.length > 0
