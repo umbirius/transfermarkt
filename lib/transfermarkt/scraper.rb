@@ -16,16 +16,19 @@ class Transfermarkt::Scraper
     players = []
       player_array = @doc.css("div.box").first 
       player_array.css("table.items > tbody > tr").each do |player| 
-          players << {
+          hash = {
             :name => player.css("td.hauptlink a").text, 
-            # :position => player.css("td.zentriert").first.text,
-            # :club => player.css("a.vereinprofil_tooltip").text,
             :age => player.css("td.zentriert")[2].text,
-            :nationality => player.css("td.zentriert img")[1].attribute("title").value,
             :market_value => player.css("td.rechts").first.text,
             :agents => player.css("td.rechts a").text,
             :url => "https://www.transfermarkt.com" + player.css("td.hauptlink>a").attribute("href").value
           }
+          if player.css("td.zentriert img")[1] 
+            hash[:nationality] = player.css("td.zentriert img")[1].attribute("title").value
+          else 
+            hash[:nationality] = "N/A"
+          end 
+        players << hash
       end 
     players
   end 
